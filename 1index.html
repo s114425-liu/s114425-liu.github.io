@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>抽卡遊戲</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>抽卡小遊戲</h1>
+
+    <button onclick="drawCard()">抽卡！</button>
+
+    <div id="result"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>卡片資訊</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1 id="cardName"></h1>
+
+    <img id="cardImage">
+
+    <p id="cardDescription"></p>
+
+    <script>
+
+        const card = JSON.parse(localStorage.getItem("selectedCard"));
+
+        document.getElementById("cardName").textContent = card.name;
+
+        document.getElementById("cardImage").src = card.image;
+
+        document.getElementById("cardDescription").textContent = card.description;
+
+    </script>
+
+</body>
+</html>
+const cards = [
+
+    {
+        name: "卡片1",
+
+        // 放圖片路徑
+        image: "images/card1.jpg",
+
+        // 放卡片介紹文字
+        description: "這裡填寫卡片1的介紹",
+
+        rarity: "SSR"
+    },
+
+    {
+        name: "卡片2",
+
+        image: "images/card2.jpg",
+
+        description: "這裡填寫卡片2的介紹",
+
+        rarity: "SR"
+    },
+
+    {
+        name: "卡片3",
+
+        image: "images/card3.jpg",
+
+        description: "這裡填寫卡片3的介紹",
+
+        rarity: "R"
+    }
+
+];
+
+function drawCard() {
+
+    const randomIndex =
+        Math.floor(Math.random() * cards.length);
+
+    const card = cards[randomIndex];
+
+    document.getElementById("result").innerHTML = `
+        <div class="card">
+            <h2>${card.name}</h2>
+
+            <img src="${card.image}" width="250">
+
+            <p>${card.rarity}</p>
+
+            <button onclick="viewDetail(${randomIndex})">
+                查看資訊
+            </button>
+        </div>
+    `;
+}
+
+function viewDetail(index){
+
+    localStorage.setItem(
+        "selectedCard",
+        JSON.stringify(cards[index])
+    );
+
+    window.location.href = "detail.html";
+}
+body{
+
+    text-align:center;
+
+    font-family:Arial;
+
+    background:#f5f5f5;
+}
+
+button{
+
+    padding:10px 20px;
+
+    cursor:pointer;
+}
+
+.card{
+
+    margin-top:20px;
+}
+
+img{
+
+    border-radius:10px;
+
+    margin:10px;
+}
