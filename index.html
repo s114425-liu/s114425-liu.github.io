@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聖域召喚：星位降臨 - 100抽保底完全版</title>
+    <title>聖域召喚：星位降臨 - 雄女傳奇迷因完全版</title>
     <style>
         :root {
+            /* 👑 UR 專屬極光動態漸層與配色 */
+            --ur-color: #ff3366;
             --ssr-color: #ffd700;
             --sr-color: #bd93f9;
             --r-color: #4169e1;
+            
+            --ur-bg: linear-gradient(135deg, #2a0845, #6441a5, #130cb7);
             --ssr-bg: radial-gradient(circle at 50% 30%, #4a3b00, #1a1500, #0a0800);
             --sr-bg: radial-gradient(circle at 50% 30%, #2d1b4e, #140c24, #08050e);
             --r-bg: radial-gradient(circle at 50% 30%, #0f2354, #071026, #030611);
@@ -23,7 +27,7 @@
 
         h1 {
             font-size: 28px; letter-spacing: 4px;
-            background: linear-gradient(135deg, #fff 40%, #f39c12 100%);
+            background: linear-gradient(135deg, #ff3366 20%, #ffd700 60%, #fff 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
         }
@@ -65,6 +69,7 @@
             border-radius: 12px; padding: 20px; border: 1px inset rgba(255,255,255,0.05);
         }
 
+        /* 🎴 卡片基礎樣式 */
         .mega-card {
             width: 130px; height: 220px; border-radius: 10px; background: #1a1d24; border: 2px solid #333;
             display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
@@ -72,22 +77,42 @@
             position: relative; cursor: pointer; transition: transform 0.2s;
         }
         .mega-card:hover { transform: scale(1.05) translateY(-5px); }
+        
+        /* 👑 UR 專屬動態彩虹極光外觀 */
+        .mega-card.UR {
+            border-image: linear-gradient(45deg, #ff3366, #ff00ff, #00ffff, #ffff00) 1;
+            box-shadow: 0 0 25px rgba(255, 51, 102, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.2);
+            background: linear-gradient(135deg, #1c052a, #0b0518);
+            animation: cardSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, urGlow 3s linear infinite;
+        }
         .mega-card.SSR { border-color: var(--ssr-color); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); background: linear-gradient(135deg, #2c2205, #110d02); }
         .mega-card.SR { border-color: var(--sr-color); box-shadow: 0 0 15px rgba(189, 147, 249, 0.3); background: linear-gradient(135deg, #1c1528, #0d0a13); }
         .mega-card.R { border-color: var(--r-color); background: linear-gradient(135deg, #0f1628, #060913); }
 
         .card-rarity-tag { font-size: 11px; font-weight: 900; letter-spacing: 1px; }
+        .UR .card-rarity-tag {
+            background: linear-gradient(90deg, #ff3366, #00ffff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 2px rgba(255,51,102,0.5);
+        }
         .SSR .card-rarity-tag { color: var(--ssr-color); }
         .SR .card-rarity-tag { color: var(--sr-color); }
         .R .card-rarity-tag { color: var(--r-color); }
-        .card-hero-name { font-size: 14px; font-weight: bold; text-align: center; margin: 30px 0; line-height: 1.4; }
+
+        .card-hero-name { font-size: 13px; font-weight: bold; text-align: center; margin: 30px 0; line-height: 1.4; word-break: break-all; }
+        .UR .card-hero-name { color: #fff; text-shadow: 0 0 6px #ff3366, 0 0 12px #00ffff; }
         .SSR .card-hero-name { color: #fff; text-shadow: 0 0 5px var(--ssr-color); }
+        
         .card-footer-type { font-size: 11px; color: #777; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px; }
         .click-hint { position: absolute; bottom: 25px; left: 0; width: 100%; font-size: 9px; color: rgba(255,255,255,0.2); text-align: center; }
 
         @keyframes cardSpawn {
             0% { transform: scale(0.5) translateY(30px); opacity: 0; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes urGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
         }
 
         /* 🧩 星位消除遊戲區 🧩 */
@@ -123,24 +148,42 @@
         .btn-start-game { background: #2ed573; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
         .btn-start-game:disabled { background: #555; cursor: not-allowed; }
 
-        /* 📜 右側歷史紀錄儀 📜 */
+        /* 📜 右側歷史紀錄儀與卡池資訊 📜 */
         .history-observatory {
-            width: 320px; background: #13161c; border: 1px solid rgba(255,255,255,0.05);
+            width: 340px; background: #13161c; border: 1px solid rgba(255,255,255,0.05);
             border-radius: 16px; padding: 20px; box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 690px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 690px; gap: 15px;
         }
-        .history-observatory h3 { margin: 0 0 10px 0; font-size: 18px; color: #f39c12; border-bottom: 2px solid rgba(243,156,18,0.2); padding-bottom: 8px; }
+        .history-observatory h3 { margin: 0; font-size: 17px; color: #f39c12; border-bottom: 2px solid rgba(243,156,18,0.2); padding-bottom: 8px; }
         
-        /* ✨ 新增：保底進度條顯示 */
         .pity-counter-box {
-            background: rgba(0, 0, 0, 0.4); border-radius: 6px; padding: 10px; margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.4); border-radius: 6px; padding: 10px;
             font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 215, 0, 0.1); text-align: left;
+            line-height: 1.5;
         }
-        .pity-number { color: var(--ssr-color); font-size: 16px; text-shadow: 0 0 5px rgba(255,215,0,0.5); }
+        .pity-number { color: var(--ssr-color); font-size: 15px; text-shadow: 0 0 5px rgba(255,215,0,0.5); }
 
-        .history-log-stream { flex: 1; overflow-y: auto; text-align: left; font-family: monospace; font-size: 12px; line-height: 1.8; }
+        .history-log-stream { height: 200px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 12px; line-height: 1.8; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; }
+
+        /* 📋 卡池預覽區樣式 */
+        .pool-preview-zone { flex: 1; overflow-y: auto; text-align: left; display: flex; flex-direction: column; gap: 12px; }
+        .pool-rarity-group { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; border: 1px solid rgba(255,255,255,0.03); }
+        .pool-rarity-title { font-size: 12px; font-weight: bold; margin-bottom: 6px; padding-left: 4px; }
+        .pool-rarity-title.UR-t { color: var(--ur-color); text-shadow: 0 0 4px rgba(255,51,102,0.3); }
+        .pool-rarity-title.SSR-t { color: var(--ssr-color); }
+        .pool-rarity-title.SR-t { color: var(--sr-color); }
+        .pool-rarity-title.R-t { color: var(--r-color); }
+        
+        .pool-item-link {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 6px 8px; margin-bottom: 4px; background: rgba(255,255,255,0.03);
+            border-radius: 4px; cursor: pointer; font-size: 12px; transition: background 0.2s;
+        }
+        .pool-item-link:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .pool-item-type { font-size: 10px; color: #666; }
 
         .log-row { margin-bottom: 6px; padding: 4px 8px; border-radius: 4px; background: rgba(255,255,255,0.01); border-left: 3px solid #555; }
+        .log-row.ur-log { border-left-color: var(--ur-color); background: rgba(255,51,102,0.06); color: #ff6688; font-weight: bold; text-shadow: 0 0 3px rgba(255,51,102,0.3); }
         .log-row.ssr-log { border-left-color: var(--ssr-color); background: rgba(255,215,0,0.04); color: var(--ssr-color); font-weight: bold; }
         .log-row.sr-log { border-left-color: var(--sr-color); background: rgba(189,147,249,0.04); color: var(--sr-color); }
         .log-row.game-log { border-left-color: #2ed573; color: #2ed573; }
@@ -173,6 +216,7 @@
     </div>
 
     <div class="main-container">
+        <!-- 左側主舞台 -->
         <div class="left-zone">
             <div class="gacha-stage">
                 <div class="btn-group">
@@ -180,10 +224,11 @@
                     <button class="btn-action btn-ten" onclick="gacha(10)">十連召喚 (-1600)</button>
                 </div>
                 <div class="card-display-wall" id="cardDisplayWall">
-                    <div style="color: #555; font-size: 15px;">傳送門已就緒！本次版本全面實裝【100抽必出SSR，抽到提前重置】皇家保底。</div>
+                    <div style="color: #555; font-size: 15px;">神話降臨！右側已解鎖「卡池內容一覽」，點擊可直接看詳細介紹。</div>
                 </div>
             </div>
 
+            <!-- 連爆小遊戲 -->
             <div class="game-theater">
                 <div class="game-topbar">
                     <span style="font-size: 16px; font-weight: bold; color: #2ed573;">🔮 星位元素爆破矩陣</span>
@@ -195,19 +240,29 @@
             </div>
         </div>
 
+        <!-- 右側歷史紀錄儀與卡池預覽 -->
         <div class="history-observatory">
             <h3>📜 聖域觀測紀錄</h3>
             
+            <!-- 保底計數器面板 -->
             <div class="pity-counter-box">
                 <div>距離 100 抽必出 SSR 還差: <span id="pityCount" class="pity-number">100</span> 抽</div>
             </div>
 
+            <!-- 抽卡即時日誌 -->
             <div class="history-log-stream" id="historyLogStream">
-                <div style="color: #444;">[系統] 觀測儀連線成功，保底星軌載入完成。</div>
+                <div style="color: #444;">[系統] 終極神話星軌載入完成，等待神蹟...</div>
+            </div>
+
+            <!-- 🔮 新增：卡池所有內容預覽區 🔮 -->
+            <h3>🔮 聖域現世卡池一覽</h3>
+            <div class="pool-preview-zone" id="poolPreviewZone">
+                <!-- 由 JavaScript 動態渲染產出清單 -->
             </div>
         </div>
     </div>
 
+    <!-- 卡片詳細資訊彈窗 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -223,26 +278,30 @@
 
     <script>
         const HERO_DATABASE = {
+            UR: [
+                { name: "雄女湖", type: "極巨水元素", desc: "【究極神話級景觀】每逢極端暴雨結界降臨，便會在聖域中現身的神秘水域。相傳其水深不可測，能吞噬一切遲到的學子，波光粼粼中蘊含著無上的大自然（與停課）怨力。", img: "" },
+                { name: "創世·星穹主宰者", type: "神聖元素", desc: "自虛無中誕生，編織命運星軌。祂的意志即是宇宙的物理常數，彈指間即可抹除群星。", img: "" }
+            ],
             SSR: [
-                { name: "滅世紅蓮龍王", type: "火元素", desc: "誕生於地心核心之源，吐息可在瞬息間將真銀城牆化為沸騰鋼水。" },
-                { name: "聖輝雷霆騎士", type: "光元素", desc: "手持恆星核心鍛造的雷神之槍，以審判之勢擊穿深淵。" },
-                { name: "幻境精靈女王", type: "木元素", desc: "掌管翡翠夢境，能逆轉生死，將不敬神明永世放逐。" }
+                { name: "113雄女外掃掃具區", type: "極毒蟲元素", desc: "【SSR 級劇毒領域】被全校學子視為禁忌的傳說結界。這裡常年盤踞著超多、超爆多、密密麻麻的嗜血黑蚊軍團！凡是踏入此區試圖拿取竹掃把的凡人，將在 3 秒內遭到飽和式轟炸，雙腿瞬間淪為絕望的紅豆冰，是摧毀少女理智的終極修煉場。", img: "" },
+                { name: "聖輝雷霆騎士", type: "光元素", desc: "手持恆星核心鍛造的雷神之槍，以審判之勢擊穿深淵。", img: "" },
+                { name: "幻境精靈女王", type: "木元素", desc: "掌管翡翠夢境，能逆轉生死，將不敬神明永世放逐。", img: "" }
             ],
             SR: [
-                { name: "不落鋼鐵要塞", type: "土元素", desc: "太古魔導遺跡的黑石傀儡，是防線中最令人絕望的重裝巨盾。" }, 
-                { name: "風暴追擊獵手", type: "風元素", desc: "幽暗密林頂尖遊俠，拉滿的星木長弓自帶撕裂空間的亂流。" }, 
-                { name: "虛空暗黑術士", type: "暗元素", desc: "精通禁忌星界魔法，隨手即可自深淵召喚異界巨獸前來助陣。" } 
+                { name: "不落鋼鐵要塞", type: "土元素", desc: "太古魔導遺跡的黑石傀儡，是防線中使用重裝巨盾抵抗巨型蚊子防線的最後希望。", img: "" }, 
+                { name: "風暴追擊獵手", type: "風元素", desc: "幽暗密林頂尖遊俠，拉滿的星木長弓自帶撕裂空間的亂流。", img: "" }, 
+                { name: "虛空暗黑術士", type: "暗元素", desc: "精通禁忌星界魔法，隨手即可自深淵召喚防蚊液結界前來助陣。", img: "" } 
             ],
             R: [
-                { name: "誓言見習劍士", type: "無元素", desc: "胸懷正義信仰的少年，體內潛藏著尚未覺醒的神聖血脈。" }, 
-                { name: "禁忌煉金學徒", type: "水元素", desc: "經常陰錯陽差地調配出具備神奇防護特效的聖級治療藥劑。" }, 
-                { name: "源流核心史萊姆", type: "水元素", desc: "純淨魔力高度濃縮的活體生物，具備極高的物理衝擊吸收率。" }
+                { name: "誓言見習劍士", type: "無元素", desc: "胸懷正義信仰的少年，體內潛藏著尚未覺醒的神聖血脈。", img: "" }, 
+                { name: "禁忌煉金學徒", type: "水元素", desc: "經常陰錯陽差地調配出具備神奇防護特效的聖級治療藥劑。", img: "" }, 
+                { name: "源流核心史萊姆", type: "水元素", desc: "純淨魔力高度濃縮的活體生物，具備極高的物理衝擊吸收率。", img: "" }
             ]
         };
 
         let playerStones = 3200;
         let totalSummons = 0;
-        let pityCounter = 0; // 已累積非 SSR 抽數 (達到 99 抽後，第 100 抽觸發保底)
+        let pityCounter = 0; 
         
         let gameActive = false;
         let gameTimeLeft = 30;
@@ -256,7 +315,6 @@
         function refreshDashboard() {
             document.getElementById("stoneCount").innerText = playerStones;
             document.getElementById("totalCount").innerText = totalSummons;
-            // 更新剩餘多少抽保底的顯示
             document.getElementById("pityCount").innerText = (100 - pityCounter);
         }
 
@@ -270,7 +328,35 @@
             stream.scrollTop = stream.scrollHeight;
         }
 
-        /* 🔮 核心抽卡系統（含 100 抽觸發與提前重置） 🔮 */
+        /* 📋 渲染右側卡池清單內容 */
+        function initPoolPreview() {
+            const container = document.getElementById("poolPreviewZone");
+            container.innerHTML = ""; // 清空
+
+            const rarities = ["UR", "SSR", "SR", "R"];
+            rarities.forEach(rarity => {
+                const group = document.createElement("div");
+                group.className = "pool-rarity-group";
+                
+                const title = document.createElement("div");
+                title.className = `pool-rarity-title ${rarity}-t`;
+                title.innerText = `✦ ${rarity} 等級角色`;
+                group.appendChild(title);
+
+                HERO_DATABASE[rarity].forEach(hero => {
+                    const item = document.createElement("div");
+                    item.className = "pool-item-link";
+                    item.innerHTML = `<span>${hero.name}</span><span class="pool-item-type">${hero.type}</span>`;
+                    // 綁定點擊事件，可以直接看彈窗介紹
+                    item.onclick = () => openModal(hero, rarity);
+                    group.appendChild(item);
+                });
+
+                container.appendChild(group);
+            });
+        }
+
+        /* 🔮 抽卡核心邏輯 */
         function gacha(times) {
             if (gameActive) {
                 alert("⚔️ 爆破矩陣正在運轉中，請先專心消除元素方塊！");
@@ -288,38 +374,38 @@
 
             for (let i = 0; i < times; i++) {
                 totalSummons++;
-                pityCounter++; // 保底計數器增加
+                pityCounter++; 
                 
                 let rarity = "R";
-                
-                // 【核心保底檢測】如果計數器累積到了第 100 抽，強制觸發 SSR
+                const roll = Math.random() * 100;
+
                 if (pityCounter === 100) {
                     rarity = "SSR";
+                    pityCounter = 0; 
                     pushLog(`✨ [保底系統] 觸發 100 抽命定星軌！必出 SSR！`, "ssr-log");
                 } else {
-                    // 一般抽卡隨機概率
-                    const roll = Math.random() * 100;
-                    
-                    if (roll < 3) {
-                        rarity = "SSR";
-                    } else if (roll < 18) {
-                        rarity = "SR";
+                    if (roll < 0.3) {
+                        rarity = "UR";   
+                    } else if (roll < 3.3) {
+                        rarity = "SSR";  
+                    } else if (roll < 18.3) {
+                        rarity = "SR";   
                     } else {
-                        // 10連抽最後一抽保底至少 SR 機制
                         if (times === 10 && i === 9) {
                             rarity = "SR";
                         } else {
                             rarity = "R";
                         }
                     }
+
+                    if (rarity === "SSR") {
+                        pushLog(`🎉 [天選之人] 在第 ${pityCounter} 抽提前斬獲 SSR！保底重置！`, "ssr-log");
+                        pityCounter = 0; 
+                    }
                 }
 
-                // 如果抽到了 SSR（不論是運氣好提早抽到，還是滿 100 抽保底），直接重置計數器為 0
-                if (rarity === "SSR") {
-                    if (pityCounter < 100) {
-                        pushLog(`🎉 [天選之人] 在第 ${pityCounter} 抽提前斬獲 SSR！保底重置！`, "ssr-log");
-                    }
-                    pityCounter = 0; 
+                if (rarity === "UR") {
+                    pushLog(`👑 【神蹟降臨】星域劇烈震動！你成功召喚了創世神話 UR！`, "ur-log");
                 }
 
                 const pool = HERO_DATABASE[rarity];
@@ -338,19 +424,23 @@
                 wall.appendChild(card);
 
                 let logStyle = "";
-                if (rarity === "SSR") logStyle = "ssr-log";
-                if (rarity === "SR") logStyle = "sr-log";
+                if (rarity === "UR") logStyle = "ur-log";
+                else if (rarity === "SSR") logStyle = "ssr-log";
+                else if (rarity === "SR") logStyle = "sr-log";
                 pushLog(`召喚獲得：【${rarity}】${hero.name} (${hero.type})`, logStyle);
             }
             refreshDashboard();
         }
 
+        /* 🖼️ 彈窗功能 */
         function openModal(hero, rarity) {
             const overlay = document.getElementById("modalOverlay");
             const banner = document.getElementById("modalBanner");
             const title = document.getElementById("modalTitle");
 
-            if (rarity === "SSR") {
+            if (rarity === "UR") {
+                banner.style.background = "var(--ur-bg)"; banner.style.color = "#fff"; title.style.color = "var(--ur-color)";
+            } else if (rarity === "SSR") {
                 banner.style.background = "var(--ssr-bg)"; banner.style.color = "var(--ssr-color)"; title.style.color = "var(--ssr-color)";
             } else if (rarity === "SR") {
                 banner.style.background = "var(--sr-bg)"; banner.style.color = "var(--sr-color)"; title.style.color = "var(--sr-color)";
@@ -358,7 +448,12 @@
                 banner.style.background = "var(--r-bg)"; banner.style.color = "var(--r-color)"; title.style.color = "var(--r-color)";
             }
 
-            banner.innerText = rarity;
+            if (hero.img && hero.img !== "") {
+                banner.innerHTML = `<img src="${hero.img}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+                banner.innerText = rarity;
+            }
+
             title.innerText = hero.name;
             document.getElementById("modalRarity").innerText = rarity;
             document.getElementById("modalAttr").innerText = hero.type;
@@ -370,7 +465,7 @@
         document.getElementById("modalOverlay").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
 
 
-        /* 🎮 三消連爆遊戲邏輯 🎮 */
+        /* 🎮 三消連爆遊戲邏輯 */
         function startPuzzleGame() {
             if (gameActive) return;
             gameActive = true;
@@ -484,7 +579,10 @@
             pushLog(`【試煉結束】透過元素大連爆，一口氣狂賺了 💎 ${earnedStones} 聖晶石！`, "game-log");
         }
 
-        window.onload = function() { refreshDashboard(); };
+        window.onload = function() { 
+            refreshDashboard(); 
+            initPoolPreview(); // 初始化卡池清單
+        };
     </script>
 </body>
 </html>
