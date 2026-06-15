@@ -3,212 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聖域召喚：星位降臨 - 雄女傳奇迷因完全版</title>
+    <title>聖域召喚：星位降臨 - 雄女正統生活傳說版 4.0</title>
     <style>
         :root {
-            /* 👑 UR 專屬極光動態漸層與配色 */
             --ur-color: #ff3366;
             --ssr-color: #ffd700;
             --sr-color: #bd93f9;
             --r-color: #4169e1;
             
-            --ur-bg: linear-gradient(135deg, #2a0845, #6441a5, #130cb7);
+            --ur-bg: linear-gradient(135deg, #2d0b3d, #4a00e0, #8e2de2);
             --ssr-bg: radial-gradient(circle at 50% 30%, #4a3b00, #1a1500, #0a0800);
             --sr-bg: radial-gradient(circle at 50% 30%, #2d1b4e, #140c24, #08050e);
             --r-bg: radial-gradient(circle at 50% 30%, #0f2354, #071026, #030611);
+            
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --panel-bg: rgba(20, 24, 34, 0.85);
         }
 
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background: radial-gradient(circle at center, #0f1219 0%, #050608 100%);
-            color: #fff; margin: 0; padding: 20px;
+            background: #07090e;
+            color: #fff; padding: 20px;
             display: flex; flex-direction: column; align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .particle {
+            position: absolute; background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%; animation: floatUp 15s infinite linear;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) translateX(0) scale(1); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-5vh) translateX(50px) scale(1.5); opacity: 0; }
         }
 
         h1 {
-            font-size: 28px; letter-spacing: 4px;
-            background: linear-gradient(135deg, #ff3366 20%, #ffd700 60%, #fff 100%);
+            font-size: 32px; letter-spacing: 6px; font-weight: 900;
+            background: linear-gradient(135deg, #ff3366 10%, #ffd700 50%, #00ffff 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            margin-bottom: 5px; text-shadow: 0 4px 20px rgba(255,51,102,0.2);
         }
+        .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 20px; letter-spacing: 2px; }
 
         .header-panel {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 40px; border-radius: 30px; display: flex; gap: 40px;
-            font-size: 18px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background: var(--panel-bg); border: 1px solid var(--panel-border);
+            padding: 15px 50px; border-radius: 50px; display: flex; gap: 50px;
+            font-size: 18px; font-weight: bold; margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.15);
         }
-        .stone-display { color: #54a0ff; text-shadow: 0 0 10px rgba(84,160,255,0.5); }
-        .count-display { color: #2ed573; }
+        .stone-display { color: #54a0ff; text-shadow: 0 0 12px rgba(84,160,255,0.6); }
+        .count-display { color: #2ed573; text-shadow: 0 0 12px rgba(46,213,115,0.6); }
 
-        .main-container { display: flex; gap: 25px; max-width: 1200px; width: 100%; justify-content: center; align-items: flex-start; }
-        @media (max-width: 1000px) { .main-container { flex-direction: column; align-items: center; } }
+        .main-container { display: flex; gap: 30px; max-width: 1350px; width: 100%; justify-content: center; align-items: flex-start; }
+        @media (max-width: 1100px) { .main-container { flex-direction: column; align-items: center; } }
 
-        .left-zone { flex: 1; display: flex; flex-direction: column; gap: 25px; width: 100%; max-width: 800px; }
+        .left-zone { flex: 1; display: flex; flex-direction: column; gap: 25px; width: 100%; max-width: 850px; }
 
-        /* 🔮 超大抽卡舞台 🔮 */
         .gacha-stage {
-            background: linear-gradient(to bottom, #141822, #0b0d13);
-            border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
-            padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            background: var(--panel-bg); border: 2px solid var(--panel-border); border-radius: 20px;
+            padding: 30px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px); position: relative; z-index: 10;
         }
 
-        .btn-group { margin-bottom: 25px; }
+        .btn-group { margin-bottom: 25px; display: flex; justify-content: center; gap: 20px; position: relative; z-index: 20; }
         .btn-action {
             background: linear-gradient(135deg, #f39c12, #d35400);
-            color: white; border: none; padding: 14px 35px; font-size: 18px;
-            font-weight: bold; border-radius: 8px; cursor: pointer; margin: 0 10px;
-            transition: all 0.2s; box-shadow: 0 4px 15px rgba(211, 84, 0, 0.4);
+            color: white; border: none; padding: 15px 40px; font-size: 18px;
+            font-weight: 800; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 6px 20px rgba(211, 84, 0, 0.4); text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(211, 84, 0, 0.6); }
-        .btn-ten { background: linear-gradient(135deg, #9b59b6, #8e44ad); box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4); }
-        .btn-ten:hover { box-shadow: 0 6px 20px rgba(142, 68, 173, 0.6); }
+        .btn-action:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(211, 84, 0, 0.6); }
+        .btn-action:active { transform: translateY(1px); }
+        .btn-ten { background: linear-gradient(135deg, #a55eea, #8854d0); box-shadow: 0 6px 20px rgba(136, 84, 208, 0.4); }
+        .btn-ten:hover { box-shadow: 0 10px 25px rgba(136, 84, 208, 0.6); }
 
         .card-display-wall {
             display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-            min-height: 280px; align-items: center; background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px; padding: 20px; border: 1px inset rgba(255,255,255,0.05);
+            min-height: 290px; align-items: center; background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px; padding: 25px; border: 1px inset rgba(255,255,255,0.05);
         }
 
-        /* 🎴 卡片基礎樣式 */
-        .mega-card {
-            width: 130px; height: 220px; border-radius: 10px; background: #1a1d24; border: 2px solid #333;
+        .card-perspective { perspective: 1000px; width: 135px; height: 230px; cursor: pointer; }
+        .card-flip-container {
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-perspective.revealed .card-flip-container { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 12px; border: 2px solid #333; box-sizing: border-box;
             display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
-            box-sizing: border-box; animation: cardSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            position: relative; cursor: pointer; transition: transform 0.2s;
         }
-        .mega-card:hover { transform: scale(1.05) translateY(-5px); }
-        
-        /* 👑 UR 專屬動態彩虹極光外觀 */
-        .mega-card.UR {
+
+        .card-back {
+            background: linear-gradient(135deg, #1e2530 0%, #0f131a 100%);
+            border-color: #4a5568; transform: rotateY(0deg); z-index: 2;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .card-back-pattern {
+            width: 85%; height: 90%; border: 1px dashed rgba(255,215,0,0.2); border-radius: 8px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;
+            pointer-events: none;
+        }
+        .card-back-crest { font-size: 28px; filter: drop-shadow(0 0 8px rgba(255,215,0,0.4)); animation: pulse 2s infinite alternate; }
+
+        .card-front { transform: rotateY(180deg); background: #161a22; pointer-events: none; }
+
+        .card-perspective.UR .card-front {
             border-image: linear-gradient(45deg, #ff3366, #ff00ff, #00ffff, #ffff00) 1;
-            box-shadow: 0 0 25px rgba(255, 51, 102, 0.6), inset 0 0 15px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.6);
             background: linear-gradient(135deg, #1c052a, #0b0518);
-            animation: cardSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, urGlow 3s linear infinite;
+            animation: urPulseGlow 3s linear infinite;
         }
-        .mega-card.SSR { border-color: var(--ssr-color); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); background: linear-gradient(135deg, #2c2205, #110d02); }
-        .mega-card.SR { border-color: var(--sr-color); box-shadow: 0 0 15px rgba(189, 147, 249, 0.3); background: linear-gradient(135deg, #1c1528, #0d0a13); }
-        .mega-card.R { border-color: var(--r-color); background: linear-gradient(135deg, #0f1628, #060913); }
+        .card-perspective.SSR .card-front { border-color: var(--ssr-color); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); background: linear-gradient(135deg, #2c2205, #110d02); }
+        .card-perspective.SR .card-front { border-color: var(--sr-color); box-shadow: 0 0 15px rgba(189, 147, 249, 0.3); background: linear-gradient(135deg, #1c1528, #0d0a13); }
+        .card-perspective.R .card-front { border-color: var(--r-color); background: linear-gradient(135deg, #0f1628, #060913); }
 
         .card-rarity-tag { font-size: 11px; font-weight: 900; letter-spacing: 1px; }
-        .UR .card-rarity-tag {
-            background: linear-gradient(90deg, #ff3366, #00ffff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 2px rgba(255,51,102,0.5);
-        }
+        .UR .card-rarity-tag { background: linear-gradient(90deg, #ff3366, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .SSR .card-rarity-tag { color: var(--ssr-color); }
         .SR .card-rarity-tag { color: var(--sr-color); }
         .R .card-rarity-tag { color: var(--r-color); }
 
-        .card-hero-name { font-size: 13px; font-weight: bold; text-align: center; margin: 30px 0; line-height: 1.4; word-break: break-all; }
-        .UR .card-hero-name { color: #fff; text-shadow: 0 0 6px #ff3366, 0 0 12px #00ffff; }
-        .SSR .card-hero-name { color: #fff; text-shadow: 0 0 5px var(--ssr-color); }
+        .card-hero-name { font-size: 13px; font-weight: bold; text-align: center; margin: 35px 0; line-height: 1.5; }
+        .UR .card-hero-name { text-shadow: 0 0 8px #ff3366, 0 0 15px #00ffff; color: #fff; }
+        .SSR .card-hero-name { text-shadow: 0 0 6px var(--ssr-color); color: #fff; }
         
-        .card-footer-type { font-size: 11px; color: #777; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px; }
-        .click-hint { position: absolute; bottom: 25px; left: 0; width: 100%; font-size: 9px; color: rgba(255,255,255,0.2); text-align: center; }
+        .card-footer-type { font-size: 11px; color: #6b7280; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; }
 
-        @keyframes cardSpawn {
-            0% { transform: scale(0.5) translateY(30px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        @keyframes urGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
+        @keyframes urPulseGlow { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.6; } 100% { transform: scale(1.05); opacity: 1; } }
 
-        /* 🧩 星位消除遊戲區 🧩 */
-        .game-theater {
-            background: #161920; border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        .instruction-panel {
+            background: rgba(243, 156, 18, 0.04); border: 1px solid rgba(243, 156, 18, 0.2);
+            border-radius: 16px; padding: 15px 20px; text-align: left; backdrop-filter: blur(5px);
         }
-        .game-topbar {
+        .instruction-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
+            cursor: pointer; font-weight: bold; color: #f39c12; font-size: 16px; user-select: none;
         }
+        .instruction-content {
+            margin-top: 12px; display: none; font-size: 13.5px; line-height: 1.7; color: #cbd5e1;
+            border-top: 1px dashed rgba(243, 156, 18, 0.2); padding-top: 12px;
+        }
+        .instruction-content h4 { margin: 10px 0 5px 0; color: #2ed573; font-size: 14.5px; }
+        .instruction-content ul { margin: 0; padding-left: 20px; }
+
+        .game-theater {
+            background: var(--panel-bg); border: 1px solid var(--panel-border);
+            border-radius: 20px; padding: 25px; box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+        }
+        .game-tabs { display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; flex-wrap: wrap; }
+        .tab-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #9ca3af;
+            padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: all 0.2s;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .tab-btn.active { background: #2ed573; color: #fff; border-color: #2ed573; box-shadow: 0 4px 12px rgba(46,213,115,0.3); }
+        .tab-btn.boom-tab.active { background: #ff4757; border-color: #ff4757; box-shadow: 0 4px 12px rgba(255,71,87,0.3); }
         
-        .puzzle-board {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
-            width: 300px; height: 300px; margin: 0 auto 15px auto;
-            background: #0b0d13; padding: 10px; border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.05); position: relative;
+        .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14.5px; }
+        
+        .game-viewport {
+            width: 100%; max-width: 550px; height: 280px; margin: 0 auto 15px auto;
+            background: #090b11; border-radius: 16px; border: 2px solid rgba(255,255,255,0.05);
+            position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            cursor: pointer;
         }
-        .puzzle-block {
-            background: #222733; border-radius: 6px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 20px; user-select: none; transition: transform 0.1s, filter 0.2s;
+
+        #runnerStage { display: none; width: 100%; height: 100%; position: relative; }
+        .water-surface { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(rgba(30,144,255,0.2), rgba(0,191,255,0.6)); border-top: 3px solid #00d2ff; }
+        .water-grid { position: absolute; bottom: 0; left:0; width:200%; height:55px; background: linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 100%; animation: gridScroll 1s infinite linear; }
+        #playerRider { position: absolute; bottom: 45px; left: 60px; font-size: 34px; z-index: 10; user-select: none; transition: transform 0.05s; }
+        .obstacle { position: absolute; font-size: 28px; z-index: 9; }
+        .coin-item { position: absolute; font-size: 24px; z-index: 9; filter: drop-shadow(0 0 6px rgba(255,215,0,0.6)); }
+        @keyframes gridScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-40px); } }
+
+        .distance-hud {
+            position: absolute; top: 12px; right: 12px; background: rgba(0, 0, 0, 0.75);
+            padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: bold;
+            color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.3); z-index: 99;
         }
-        .puzzle-block:hover { transform: scale(1.05); filter: brightness(1.2); }
-        .puzzle-block:active { transform: scale(0.95); }
+        .ins-shield-active { animation: shieldPulse 0.2s infinite alternate; filter: drop-shadow(0 0 12px #ffd700); }
+        .iframe-invincible { animation: blinkEffect 0.15s infinite alternate; opacity: 0.6; }
+        
+        @keyframes shieldPulse { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+        @keyframes blinkEffect { 0% { opacity: 0.2; } 100% { opacity: 0.9; } }
 
-        .block-fire { background: linear-gradient(135deg, #ff4d4d, #ff0000); box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
-        .block-water { background: linear-gradient(135deg, #4da6ff, #0066cc); box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
-        .block-thunder { background: linear-gradient(135deg, #e6b800, #997a00); box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
-        .block-wood { background: linear-gradient(135deg, #2ed573, #1e944f); box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
-        .block-empty { background: #0b0d13; cursor: default; pointer-events: none; }
+        #clickerStage { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; }
+        .clicker-runner-avatar { font-size: 52px; margin-bottom: 12px; transition: transform 0.05s ease-in-out; user-select: none; }
+        .btn-click-target {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white; border: none; padding: 16px 45px; font-size: 22px;
+            font-weight: 900; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4); text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.05s; user-select: none;
+        }
+        .btn-click-target:active { transform: scale(0.92); }
+        .btn-click-target:disabled { background: #333; color: #777; box-shadow: none; cursor: not-allowed; }
 
-        .btn-start-game { background: #2ed573; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
-        .btn-start-game:disabled { background: #555; cursor: not-allowed; }
+        #boomStage { display: none; width: 100%; height: 100%; justify-content: center; align-items: center; }
+        #zebraGrid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;
+            background: #111; padding: 8px; border-radius: 12px;
+            width: 240px; height: 240px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .zebra-block {
+            border-radius: 6px; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; font-size: 18px; user-select: none;
+            transition: transform 0.1s; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
+        }
+        .zebra-block:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .zebra-block:active { transform: scale(0.95); }
+        
+        .z-red { background: #ff4757; color: white; }
+        .z-yellow { background: #ffa502; color: black; }
+        .z-blue { background: #1e90ff; color: white; }
+        .z-green { background: #2ed573; color: white; }
 
-        /* 📜 右側歷史紀錄儀與卡池資訊 📜 */
+        .clicker-description-bar {
+            min-height: 40px; background: rgba(0,0,0,0.3); border-radius: 10px;
+            padding: 10px 15px; font-size: 12.5px; color: #9ca3af; text-align: center;
+            border: 1px dashed rgba(255,255,255,0.08); margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .btn-start-game {
+            background: linear-gradient(135deg, #2ed573, #26af5f); color: white; border: none;
+            padding: 14px 35px; font-size: 16px; font-weight: bold; border-radius: 10px;
+            cursor: pointer; width: 100%; max-width: 320px; margin: 0 auto; display: block;
+            box-shadow: 0 5px 15px rgba(46,213,115,0.3); transition: all 0.2s;
+        }
+        .btn-start-game:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(46,213,115,0.5); }
+        .btn-start-game:disabled { background: #4b5563; box-shadow: none; cursor: not-allowed; transform: none; }
+
         .history-observatory {
-            width: 340px; background: #13161c; border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px; padding: 20px; box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 690px; gap: 15px;
+            width: 380px; background: var(--panel-bg); border: 1px solid var(--panel-border);
+            border-radius: 20px; padding: 22px; box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 930px; gap: 15px;
+            backdrop-filter: blur(10px);
         }
-        .history-observatory h3 { margin: 0; font-size: 17px; color: #f39c12; border-bottom: 2px solid rgba(243,156,18,0.2); padding-bottom: 8px; }
+        .history-observatory h3 { margin: 0; font-size: 17px; color: #f39c12; border-bottom: 2px solid rgba(243,156,18,0.2); padding-bottom: 8px; letter-spacing: 1px; }
         
-        .pity-counter-box {
-            background: rgba(0, 0, 0, 0.4); border-radius: 6px; padding: 10px;
-            font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 215, 0, 0.1); text-align: left;
-            line-height: 1.5;
+        .pity-counter-box { background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 12px; font-size: 13.5px; font-weight: bold; border: 1px solid rgba(255, 215, 0, 0.15); }
+        .pity-number { color: var(--ssr-color); font-size: 16px; text-shadow: 0 0 8px rgba(255,215,0,0.4); }
+        
+        .history-log-stream { height: 160px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 12px; line-height: 1.8; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 10px; }
+
+        .achievement-row.unlocked-row {
+            background: linear-gradient(90deg, rgba(74,59,0,0.4), rgba(20,24,34,0.8)) !important;
+            border: 1px solid rgba(255,215,0,0.2);
         }
-        .pity-number { color: var(--ssr-color); font-size: 15px; text-shadow: 0 0 5px rgba(255,215,0,0.5); }
+        .badge.unlocked { 
+            filter: grayscale(0) !important; 
+            opacity: 1 !important; 
+            border-color: #ffd700 !important; 
+            background: #3a2e05 !important; 
+            box-shadow: 0 0 12px rgba(255,215,0,0.5); 
+        }
 
-        .history-log-stream { height: 200px; overflow-y: auto; text-align: left; font-family: monospace; font-size: 12px; line-height: 1.8; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; }
-
-        /* 📋 卡池預覽區樣式 */
         .pool-preview-zone { flex: 1; overflow-y: auto; text-align: left; display: flex; flex-direction: column; gap: 12px; }
-        .pool-rarity-group { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; border: 1px solid rgba(255,255,255,0.03); }
-        .pool-rarity-title { font-size: 12px; font-weight: bold; margin-bottom: 6px; padding-left: 4px; }
-        .pool-rarity-title.UR-t { color: var(--ur-color); text-shadow: 0 0 4px rgba(255,51,102,0.3); }
+        .pool-rarity-group { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px; border: 1px solid rgba(255,255,255,0.03); }
+        .pool-rarity-title { font-size: 12.5px; font-weight: bold; margin-bottom: 8px; padding-left: 4px; }
+        .pool-rarity-title.UR-t { color: var(--ur-color); }
         .pool-rarity-title.SSR-t { color: var(--ssr-color); }
         .pool-rarity-title.SR-t { color: var(--sr-color); }
         .pool-rarity-title.R-t { color: var(--r-color); }
         
-        .pool-item-link {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 6px 8px; margin-bottom: 4px; background: rgba(255,255,255,0.03);
-            border-radius: 4px; cursor: pointer; font-size: 12px; transition: background 0.2s;
-        }
-        .pool-item-link:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .pool-item-type { font-size: 10px; color: #666; }
+        .pool-item-link { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; margin-bottom: 5px; background: rgba(255,255,255,0.02); border-radius: 6px; cursor: pointer; font-size: 12.5px; transition: background 0.2s; }
+        .pool-item-link:hover { background: rgba(255,255,255,0.08); }
+        .pool-item-type { font-size: 11px; color: #555; }
 
-        .log-row { margin-bottom: 6px; padding: 4px 8px; border-radius: 4px; background: rgba(255,255,255,0.01); border-left: 3px solid #555; }
-        .log-row.ur-log { border-left-color: var(--ur-color); background: rgba(255,51,102,0.06); color: #ff6688; font-weight: bold; text-shadow: 0 0 3px rgba(255,51,102,0.3); }
+        .log-row { margin-bottom: 6px; padding: 5px 10px; border-radius: 6px; background: rgba(255,255,255,0.01); border-left: 4px solid #555; }
+        .log-row.ur-log { border-left-color: var(--ur-color); background: rgba(255,51,102,0.06); color: #ff6688; font-weight: bold; }
         .log-row.ssr-log { border-left-color: var(--ssr-color); background: rgba(255,215,0,0.04); color: var(--ssr-color); font-weight: bold; }
-        .log-row.sr-log { border-left-color: var(--sr-color); background: rgba(189,147,249,0.04); color: var(--sr-color); }
+        .log-row.sr-log { border-left-color: var(--sr-color); color: var(--sr-color); }
+        .log-row.r-log { border-left-color: var(--r-color); color: #60a5fa; }
         .log-row.game-log { border-left-color: #2ed573; color: #2ed573; }
 
-        /* 🖼️ 卡片詳細資訊彈窗 🖼️ */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 5, 8, 0.85); justify-content: center; align-items: center;
-            z-index: 9999; backdrop-filter: blur(8px);
-        }
-        .modal-content {
-            background: #141822; border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px; max-width: 450px; width: 90%; overflow: hidden; position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-        }
-        .modal-banner-box { width: 100%; height: 160px; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: 900; }
-        .modal-body { padding: 25px; text-align: left; }
-        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: rgba(255,255,255,0.5); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 5, 8, 0.88); justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(10px); }
+        .modal-content { background: #12151f; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; max-width: 460px; width: 90%; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .modal-banner-box { width: 100%; height: 160px; display: flex; justify-content: center; align-items: center; font-size: 42px; font-weight: 900; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .modal-body { padding: 30px; text-align: left; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 32px; cursor: pointer; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+        .modal-close:hover { color: #fff; }
         .info-label { font-weight: bold; color: #f39c12; margin-right: 8px; font-size: 14px; }
-        .modal-desc { line-height: 1.6; color: #abb2bf; font-size: 13.5px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; }
+        .modal-desc { line-height: 1.7; color: #cbd5e1; font-size: 14px; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px; }
+
+        .badge {
+            width: 36px; height: 36px; border-radius: 50%; background: #222; border: 2px solid #444; 
+            display: flex; justify-content: center; align-items: center; font-size: 18px; 
+            filter: grayscale(1); opacity: 0.3; transition: all 0.3s;
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-particles" id="bgParticles"></div>
+
     <h1>✨ 聖域召喚：星位降臨 ✨</h1>
+    <div class="subtitle">—— 雄女生活傳說・正統極致考據修正版 4.0 ——</div>
 
     <div class="header-panel">
         <div>💎 聖晶石: <span id="stoneCount" class="stone-display">3200</span></div>
@@ -216,53 +320,128 @@
     </div>
 
     <div class="main-container">
-        <!-- 左側主舞台 -->
         <div class="left-zone">
             <div class="gacha-stage">
+                <div style="font-size: 13px; color: #ffca28; margin-bottom: 15px; letter-spacing: 1px; font-weight: bold;">
+                    🎰 當前星軌召喚率：UR 1% ｜ SSR 3% ｜ SR 26% ｜ R 70%
+                </div>
                 <div class="btn-group">
-                    <button class="btn-action" onclick="gacha(1)">單次召喚 (-160)</button>
-                    <button class="btn-action btn-ten" onclick="gacha(10)">十連召喚 (-1600)</button>
+                    <button class="btn-action" onclick="window.gacha(1)">單次召喚 (-160)</button>
+                    <button class="btn-action btn-ten" onclick="window.gacha(10)">十連召喚 (-1600)</button>
                 </div>
                 <div class="card-display-wall" id="cardDisplayWall">
-                    <div style="color: #555; font-size: 15px;">神話降臨！右側已解鎖「卡池內容一覽」，點擊可直接看詳細介紹。</div>
+                    <div style="color: #6b7280; font-size: 14px; letter-spacing: 1px;">校園結界已就緒。點擊上方按鈕召喚生活記憶！</div>
                 </div>
             </div>
 
-            <!-- 連爆小遊戲 -->
-            <div class="game-theater">
-                <div class="game-topbar">
-                    <span style="font-size: 16px; font-weight: bold; color: #2ed573;">🔮 星位元素爆破矩陣</span>
-                    <span id="gameTimer" style="color: #ff4757; font-weight: bold; font-size: 15px;">剩餘時間: 0s</span>
-                    <span id="scoreText" style="color: #ffd700; font-weight: bold; font-size: 15px;">賺取晶石: 0</span>
+            <div class="instruction-panel">
+                <div class="instruction-header" onclick="toggleInstructions()">
+                    <span>📜 聖域試煉：操場求生與爆破連擊指南</span>
+                    <span id="arrowIndicator">▼</span>
                 </div>
-                <div class="puzzle-board" id="puzzleBoard"></div>
-                <button class="btn-start-game" id="gameStartBtn" onclick="startPuzzleGame()">啟動爆破矩陣 (30秒)</button>
+                <div class="instruction-content" id="instructionContent">
+                    <h4>🌊 模式一：雄女湖大亂鬥生存戰 (⚡已解鎖二段跳！)</h4>
+                    <ul>
+                        <li><strong>操作方式</strong>：點擊【遊戲視窗】或按【空白鍵】跳躍。</li>
+                        <li><strong>核心技巧</strong>：在空中**再次點擊或按下空白鍵**，可發動「二段跳」滯空飛越超高障礙！</li>
+                        <li><strong>獎勵</strong>：每劃行 100 公尺，自動獲贈 50 顆聖晶石！</li>
+                    </ul>
+                    <h4>⚡ 模式二：校門口極速連點器</h4>
+                    <ul>
+                        <li><strong>操作方式</strong>：限時 15 秒！狂敲按鈕或空白鍵，一下賺 10 顆聖晶石！</li>
+                    </ul>
+                    <h4>💥 模式三：小斑馬同色連擊大爆破</h4>
+                    <ul>
+                        <li><strong>操作方式</strong>：點擊畫面上兩個或以上【上下左右相連】的同顏色小斑馬方塊，就能發動連鎖大爆破！15 秒內消除越多，分數累積得越快！</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="game-theater">
+                <div class="game-tabs">
+                    <button class="tab-btn active" id="tabRunner" onclick="switchGameMode('runner')">🌊 操場雄女湖大亂鬥</button>
+                    <button class="tab-btn" id="tabClicker" onclick="switchGameMode('clicker')">⚡ 校門口極速連點器</button>
+                    <button class="tab-btn boom-tab" id="tabBoom" onclick="switchGameMode('boom')">💥 小斑馬連擊大爆破</button>
+                </div>
+
+                <div class="game-topbar">
+                    <span id="gameTitleStatus" style="font-size: 15px; font-weight: bold; color: #2ed573;">載入中...</span>
+                    <span id="gameTimer" style="color: #ff4757; font-weight: bold;">狀態: 待機</span>
+                    <span id="scoreText" style="color: #ffd700; font-weight: bold;">本局賺取: 0</span>
+                </div>
+
+                <div class="game-viewport" id="gameViewport" onclick="handleViewportClick()">
+                    <div class="distance-hud" id="distanceHud" style="display:none;">距離: 0 m</div>
+
+                    <div id="runnerStage">
+                        <div id="playerRider">🚣‍♀️</div>
+                        <div class="water-surface"><div class="water-grid"></div></div>
+                    </div>
+
+                    <div id="clickerStage">
+                        <div class="clicker-runner-avatar" id="clickerAvatar">🏃‍♀️</div>
+                        <button class="btn-click-target" id="clickTargetBtn" onclick="performClickAction(event)" disabled>🏃 狂奔踩點！</button>
+                    </div>
+
+                    <div id="boomStage">
+                        <div id="zebraGrid"></div>
+                    </div>
+                </div>
+
+                <div class="clicker-description-bar" id="clickerDescBar" style="display:none;">
+                    💡 提示說明欄位將根據目前所選的生活遊戲模式動態調整。
+                </div>
+
+                <button class="btn-start-game" id="gameStartBtn" onclick="startGameController()">開始挑戰獲得晶石</button>
             </div>
         </div>
 
-        <!-- 右側歷史紀錄儀與卡池預覽 -->
         <div class="history-observatory">
+            <h3>🏆 聖域成就徽章</h3>
+            <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div class="achievement-box" id="achievementBox" style="display: flex; flex-direction: column; gap: 10px;">
+                    
+                    <div class="achievement-row" id="row-gacha1" style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge" id="badge-gacha1">🔮</div>
+                        <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">初入聖域</div><div style="font-size: 11px; color: #9ca3af;">首次進行任意召喚</div></div>
+                    </div>
+
+                    <div class="achievement-row" id="row-gacha50" style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge" id="badge-gacha50">🏫</div>
+                        <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">資深雄女人</div><div style="font-size: 11px; color: #9ca3af;">累計召喚達 50 次</div></div>
+                    </div>
+
+                    <div class="achievement-row" id="row-lake300" style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge" id="badge-lake300">🚣</div>
+                        <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">雄女湖航海王</div><div style="font-size: 11px; color: #9ca3af;">雄女湖航行超過 300 公尺</div></div>
+                    </div>
+
+                    <div class="achievement-row" id="row-click120" style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge" id="badge-click120">⚡</div>
+                        <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">無影神速</div><div style="font-size: 11px; color: #9ca3af;">連點器單局點擊破 120 下</div></div>
+                    </div>
+
+                    <div class="achievement-row" id="row-boom15" style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge" id="badge-boom15">🦓</div>
+                        <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">斑馬爆破大師</div><div style="font-size: 11px; color: #9ca3af;">單局消除小斑馬超過 100 隻</div></div>
+                    </div>
+
+                </div>
+            </div>
+
             <h3>📜 聖域觀測紀錄</h3>
-            
-            <!-- 保底計數器面板 -->
             <div class="pity-counter-box">
                 <div>距離 100 抽必出 SSR 還差: <span id="pityCount" class="pity-number">100</span> 抽</div>
             </div>
-
-            <!-- 抽卡即時日誌 -->
             <div class="history-log-stream" id="historyLogStream">
-                <div style="color: #444;">[系統] 終極神話星軌載入完成，等待神蹟...</div>
+                <div style="color: #555;">[系統] 雄女學測大考結界與地瓜防禦矩陣已校準完畢。</div>
             </div>
 
-            <!-- 🔮 新增：卡池所有內容預覽區 🔮 -->
             <h3>🔮 聖域現世卡池一覽</h3>
-            <div class="pool-preview-zone" id="poolPreviewZone">
-                <!-- 由 JavaScript 動態渲染產出清單 -->
-            </div>
+            <div class="pool-preview-zone" id="poolPreviewZone"></div>
         </div>
     </div>
 
-    <!-- 卡片詳細資訊彈窗 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -270,7 +449,7 @@
             <div class="modal-body">
                 <h2 id="modalTitle" style="margin: 0 0 15px 0;">角色名稱</h2>
                 <p style="margin: 5px 0;"><span class="info-label">稀有度：</span><span id="modalRarity" style="font-weight:bold;"></span></p>
-                <p style="margin: 5px 0;"><span class="info-label">星位元素：</span><span id="modalAttr"></span></p>
+                <p style="margin: 5px 0;"><span class="info-label">生活分類：</span><span id="modalAttr"></span></p>
                 <p id="modalDesc" class="modal-desc"></p>
             </div>
         </div>
@@ -279,23 +458,20 @@
     <script>
         const HERO_DATABASE = {
             UR: [
-                { name: "雄女湖", type: "極巨水元素", desc: "【究極神話級景觀】每逢極端暴雨結界降臨，便會在聖域中現身的神秘水域。相傳其水深不可測，能吞噬一切遲到的學子，波光粼粼中蘊含著無上的大自然（與停課）怨力。", img: "" },
-                { name: "創世·星穹主宰者", type: "神聖元素", desc: "自虛無中誕生，編織命運星軌。祂的意志即是宇宙的物理常數，彈指間即可抹除群星。", img: "" }
+                { name: "榕園的紫槓學姊", type: "正統悲愴都市傳說", desc: "【UR 級殿堂神話】雄女最著名且最靈驗的都市傳說。相傳她是過去不幸在榕園自殺的學姊，靈魂化為守護結界。校園中流傳著極其精準的考核秘令：只要在深夜 12 點，帶著「雞排」與「珍奶」前往榕園呼喚她，學姊就會在夜霧中現身——不為索命，而是會溫柔且清晰地親自教你最令人崩潰的「三角函數」！是無數數學苦難學妹的終極救星。" },
+                { name: "淹水的操場(雄女湖)", type: "史詩天災景觀", desc: "【UR 級宏偉災景】高雄暴雨限定的終極奇觀。每逢大雨，整個操場便會在短時間內化為汪洋一片，水深直接及膝，司令台瞬間變成孤獨的碼頭。這是全校師生共同擁有的宏偉生活記憶，更是專屬於雄女人的壯麗傳奇景緻！" }
             ],
             SSR: [
-                { name: "113雄女外掃掃具區", type: "極毒蟲元素", desc: "【SSR 級劇毒領域】被全校學子視為禁忌的傳說結界。這裡常年盤踞著超多、超爆多、密密麻麻的嗜血黑蚊軍團！凡是踏入此區試圖拿取竹掃把的凡人，將在 3 秒內遭到飽和式轟炸，雙腿瞬間淪為絕望的紅豆冰，是摧毀少女理智的終極修煉場。", img: "" },
-                { name: "聖輝雷霆騎士", type: "光元素", desc: "手持恆星核心鍛造的雷神之槍，以審判之勢擊穿深淵。", img: "" },
-                { name: "幻境精靈女王", type: "木元素", desc: "掌管翡翠夢境，能逆轉生死，將不敬神明永世放逐。", img: "" }
+                { name: "113外掃區掃具區", type: "終極怨念結界", desc: "【SSR 級血肉磨坊】放學鐘聲響起時最不情願踏入的地獄。這裡不僅凝聚了永遠掃不完的枯枝落葉、極難操縱的竹掃把，更恐怖的是鋪天蓋地的「小黑蚊與蚊子大軍」！每次前去打掃都必須用肉身與成群嗜血的蚊子生死搏鬥，堪稱全校怨念密度最高的地方。" },
+                { name: "藝能大樓電梯", type: "垂直移動迷宮", desc: "【SSR 級時空扭曲機】每天早補或第一節課絕對是最難搭到的終極地獄模式！眼看鐘聲就要響起，電梯前卻擠滿了絕望的靈魂，每層樓都停、速度慢到讓人懷疑人生，堪稱雄女人的遲到終結者與耐力大考驗！" }
             ],
             SR: [
-                { name: "不落鋼鐵要塞", type: "土元素", desc: "太古魔導遺跡的黑石傀儡，是防線中使用重裝巨盾抵抗巨型蚊子防線的最後希望。", img: "" }, 
-                { name: "風暴追擊獵手", type: "風元素", desc: "幽暗密林頂尖遊俠，拉滿的星木長弓自帶撕裂空間的亂流。", img: "" }, 
-                { name: "虛空暗黑術士", type: "暗元素", desc: "精通禁忌星界魔法，隨手即可自深淵召喚防蚊液結界前來助陣。", img: "" } 
+                { name: "黑冠麻鷺 (地瓜)", type: "學測分科強制轉向神獸", desc: "【SR 級 大考終結因果鳥】常駐於校內草坪上、看起來呆萌卻背負著恐怖因果律的大笨鳥。雄女高三學妹間流傳著一條絕對不可觸碰的鐵律：『在學測前夕，千萬不能去嚇地瓜！』如果不信邪或白目跑去嚇到牠，大考結界的魔咒就會被瞬間觸發，你將會面臨極其慘烈的現世報——直接被強制保送、落入 7 月份的分科測驗地獄！" },
+                { name: "排球場線外發球手", type: "體育課終極試煉", desc: "【SR 級高手】頂著高雄烈日，在排球場上使出渾身解數，只求發球能精準過網的熱血代名詞。" }
             ],
             R: [
-                { name: "誓言見習劍士", type: "無元素", desc: "胸懷正義信仰的少年，體內潛藏著尚未覺醒的神聖血脈。", img: "" }, 
-                { name: "禁忌煉金學徒", type: "水元素", desc: "經常陰錯陽差地調配出具備神奇防護特效的聖級治療藥劑。", img: "" }, 
-                { name: "源流核心史萊姆", type: "水元素", desc: "純淨魔力高度濃縮的活體生物，具備極高的物理衝擊吸收率。", img: "" }
+                { name: "皮炎", type: "大考救贖神獸", desc: "【R 級 班級鎮殿寵物】真實身份是《貓貓蟲咖波》裡面的那隻軟萌『狗狗』！負責默默趴在抽屜或課桌椅一角，幫大家吸走所有模擬考與作業的龐大壓力。" },
+                { name: "校園小麻雀", type: "群聚飛羽生物", desc: "【R 級 跑道常駐生物】平時成群在操場跑道上啄食的可愛鳥鳥，即使面對暴雨，依舊在低空滑翔。" }
             ]
         };
 
@@ -303,23 +479,88 @@
         let totalSummons = 0;
         let pityCounter = 0; 
         
-        let gameActive = false;
-        let gameTimeLeft = 30;
+        let currentMode = 'runner'; 
+        let gameRunning = false;
         let earnedStones = 0;
-        const ROWS = 6;
-        const COLS = 6;
-        let boardState = [];
-        const TYPES = ['fire', 'water', 'thunder', 'wood'];
-        const TYPE_ICONS = { fire: '🔥', water: '💧', thunder: '⚡', wood: '🪵' };
+        let spawnInterval;
+        let countdownInterval;
+        let animationFrameId = null;
+
+        let playerBottom = 45;
+        let jumpVelocity = 0;
+        let currentJumpCount = 0;     
+        const MAX_JUMP_LIMIT = 2;     
+        const GRAVITY_CONSTANT = 0.48; 
+        const JUMP_FORCE = 10.5;       
+        let baseGameSpeed = 4.5;       
+        let gameDistance = 0;
+        let lastDistanceMilestone = 0;
+        
+        let hasInstructorShield = false; 
+        let isInvincible = false; 
+
+        let clickerTimeLeft = 15;
+        let clickerCount = 0;
+
+        let boomTimeLeft = 15;
+        let zebraGridData = [];
+        let totalZbrasPopped = 0;
+        const zebraStyles = [
+            { className: 'z-red', emoji: '🦓' },
+            { className: 'z-yellow', emoji: '🦓' },
+            { className: 'z-blue', emoji: '🦓' },
+            { className: 'z-green', emoji: '🦓' }
+        ];
+
+        let unlockedBadges = [];
+
+        function initParticles() {
+            const container = document.getElementById("bgParticles");
+            if(!container) return;
+            container.innerHTML = "";
+            for (let i = 0; i < 25; i++) {
+                const p = document.createElement("div");
+                p.className = "particle";
+                p.style.width = Math.random() * 6 + 2 + "px"; p.style.height = p.style.width;
+                p.style.left = Math.random() * 100 + "vw";
+                p.style.animationDelay = Math.random() * 12 + "s";
+                container.appendChild(p);
+            }
+        }
+
+        function toggleInstructions() {
+            const content = document.getElementById("instructionContent");
+            const arrow = document.getElementById("arrowIndicator");
+            content.style.display = content.style.display === "block" ? "none" : "block";
+            arrow.innerText = content.style.display === "block" ? "▲" : "▼";
+        }
 
         function refreshDashboard() {
+            if (isNaN(playerStones) || playerStones === undefined) playerStones = 3200;
             document.getElementById("stoneCount").innerText = playerStones;
             document.getElementById("totalCount").innerText = totalSummons;
             document.getElementById("pityCount").innerText = (100 - pityCounter);
         }
 
+        function unlockBadge(id) {
+            if (!unlockedBadges.includes(id)) {
+                unlockedBadges.push(id);
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add("unlocked");
+                    const rowId = id.replace("badge-", "row-");
+                    const rowEl = document.getElementById(rowId);
+                    if (rowEl) rowEl.classList.add("unlocked-row");
+                    
+                    let nameText = rowEl ? rowEl.querySelector('div div').innerText : "新成就";
+                    pushLog(`🏆【解鎖成就】${nameText}！`, "ssr-log");
+                }
+            }
+        }
+
         function pushLog(text, className = "") {
             const stream = document.getElementById("historyLogStream");
+            if(!stream) return;
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const row = document.createElement("div");
             row.className = `log-row ${className}`;
@@ -328,261 +569,487 @@
             stream.scrollTop = stream.scrollHeight;
         }
 
-        /* 📋 渲染右側卡池清單內容 */
         function initPoolPreview() {
             const container = document.getElementById("poolPreviewZone");
-            container.innerHTML = ""; // 清空
-
-            const rarities = ["UR", "SSR", "SR", "R"];
-            rarities.forEach(rarity => {
-                const group = document.createElement("div");
-                group.className = "pool-rarity-group";
-                
-                const title = document.createElement("div");
-                title.className = `pool-rarity-title ${rarity}-t`;
-                title.innerText = `✦ ${rarity} 等級角色`;
+            if(!container) return;
+            container.innerHTML = "";
+            ["UR", "SSR", "SR", "R"].forEach(rarity => {
+                const group = document.createElement("div"); group.className = "pool-rarity-group";
+                const title = document.createElement("div"); title.className = `pool-rarity-title ${rarity}-t`; title.innerText = `✦ ${rarity} 等級`;
                 group.appendChild(title);
-
                 HERO_DATABASE[rarity].forEach(hero => {
-                    const item = document.createElement("div");
-                    item.className = "pool-item-link";
+                    const item = document.createElement("div"); item.className = "pool-item-link";
                     item.innerHTML = `<span>${hero.name}</span><span class="pool-item-type">${hero.type}</span>`;
-                    // 綁定點擊事件，可以直接看彈窗介紹
-                    item.onclick = () => openModal(hero, rarity);
+                    item.onclick = () => openModal(hero.name, rarity, hero.type, hero.desc);
                     group.appendChild(item);
                 });
-
                 container.appendChild(group);
             });
         }
 
-        /* 🔮 抽卡核心邏輯 */
-        function gacha(times) {
-            if (gameActive) {
-                alert("⚔️ 爆破矩陣正在運轉中，請先專心消除元素方塊！");
-                return;
+        function switchGameMode(mode) {
+            if (gameRunning) forceEndAnyGame();
+            currentMode = mode;
+            
+            document.getElementById("tabRunner").classList.toggle("active", mode === 'runner');
+            document.getElementById("tabClicker").classList.toggle("active", mode === 'clicker');
+            document.getElementById("tabBoom").classList.toggle("active", mode === 'boom');
+            
+            document.getElementById("runnerStage").style.display = mode === 'runner' ? 'block' : 'none';
+            document.getElementById("clickerStage").style.display = mode === 'clicker' ? 'flex' : 'none';
+            document.getElementById("boomStage").style.display = mode === 'boom' ? 'flex' : 'none';
+            
+            document.getElementById("scoreText").innerText = "本局賺取: 0";
+            
+            if (mode === 'runner') {
+                document.getElementById("gameTitleStatus").innerText = "🌊 操場雄女湖大亂鬥 (二段跳加強版)";
+                document.getElementById("gameTimer").innerText = "狀態: 待機中";
+                document.getElementById("clickerDescBar").style.display = "none";
+                document.getElementById("distanceHud").style.display = "block";
+                resetRunnerVisuals();
+            } else if (mode === 'clicker') {
+                document.getElementById("gameTitleStatus").innerText = "⚡ 校門口極速連點器";
+                document.getElementById("gameTimer").innerText = "狀態: 待機中";
+                document.getElementById("clickerDescBar").style.display = "flex";
+                document.getElementById("clickerDescBar").innerText = "💡 點擊下方按鈕開始！展現一秒10次的究極手速壓線進校門！";
+                document.getElementById("distanceHud").style.display = "none";
+                resetClickerVisuals();
+            } else {
+                document.getElementById("gameTitleStatus").innerText = "💥 小斑馬連擊大爆破";
+                document.getElementById("gameTimer").innerText = "狀態: 待機中";
+                document.getElementById("clickerDescBar").style.display = "flex";
+                document.getElementById("clickerDescBar").innerText = "💡 經典玩法！點擊兩個或以上上下左右相連的同色小斑馬，就能觸發連鎖爆破重力掉落！";
+                document.getElementById("distanceHud").style.display = "none";
+                initStaticZebraGrid();
             }
-            const cost = times * 160;
-            if (playerStones < cost) {
-                alert("💎 聖晶石不足！請啟動下方的矩陣玩連爆小遊戲賺取！");
-                return;
+        }
+
+        function forceEndAnyGame() {
+            gameRunning = false;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            clearInterval(spawnInterval);
+            clearInterval(countdownInterval);
+            document.getElementById("gameStartBtn").disabled = false;
+            document.getElementById("clickTargetBtn").disabled = true;
+        }
+
+        function startGameController() {
+            if (gameRunning) return;
+            gameRunning = true; 
+            earnedStones = 0;
+            document.getElementById("gameStartBtn").disabled = true;
+
+            if (currentMode === 'runner') {
+                startRunnerGame();
+            } else if (currentMode === 'clicker') {
+                startClickerGame();
+            } else if (currentMode === 'boom') {
+                startBoomGame();
+            }
+        }
+
+        function handleViewportClick() {
+            if (!gameRunning) return;
+            if (currentMode === 'runner') {
+                triggerRunnerJump();
+            }
+        }
+
+        function resetRunnerVisuals() {
+            playerBottom = 45; jumpVelocity = 0; currentJumpCount = 0; baseGameSpeed = 4.5; gameDistance = 0; lastDistanceMilestone = 0; 
+            hasInstructorShield = false;
+            isInvincible = false; 
+            document.getElementById("gameViewport").style.background = "#090b11";
+            document.getElementById("distanceHud").innerText = "距離: 0 m";
+            const rider = document.getElementById("playerRider");
+            if(rider) { rider.style.bottom = '45px'; rider.innerText = "🚣‍♀️"; rider.className = ""; }
+            document.querySelectorAll('.obstacle, .coin-item').forEach(el => el.remove());
+        }
+
+        function startRunnerGame() {
+            resetRunnerVisuals();
+            document.getElementById("gameTitleStatus").innerText = "🚣 操場大淹水！二段跳躍啟動！";
+            document.getElementById("gameTimer").innerText = "❤️ 狀態: 正常划行中";
+            document.getElementById("scoreText").innerText = "本局賺取: 0";
+            
+            pushLog("【大雨警告】雄女湖已開放，按空白鍵或點擊畫面可施展「二段跳」！", "game-log");
+
+            function updateGameFrame() {
+                if (!gameRunning) return;
+                baseGameSpeed += 0.0025; gameDistance += (baseGameSpeed * 0.035);
+                document.getElementById("distanceHud").innerText = `距離: ${Math.floor(gameDistance)} m`;
+
+                if (isInvincible) {
+                    document.getElementById("gameTimer").innerText = `✨ 無敵閃爍中 (${Math.floor(gameDistance)}m)`;
+                } else if (hasInstructorShield) {
+                    document.getElementById("gameTimer").innerText = `🛡️ 狀態: 教官庇護中 (${Math.floor(gameDistance)}m)`;
+                } else {
+                    document.getElementById("gameTimer").innerText = `🌊 狀態: 正在生存 (${Math.floor(gameDistance)}m)`;
+                }
+
+                if (Math.floor(gameDistance) >= 300) unlockBadge("badge-lake300");
+
+                if (Math.floor(gameDistance) - lastDistanceMilestone >= 100) {
+                    lastDistanceMilestone += 100;
+                    earnedStones += 50; playerStones += 50;
+                    document.getElementById("scoreText").innerText = `本局賺取: ${earnedStones}`;
+                    refreshDashboard();
+                    pushLog(`🚩【里程碑】劃行達 ${lastDistanceMilestone} 公尺！獲得 💎 50 晶石！`, "game-log");
+                }
+
+                playerBottom += jumpVelocity; 
+                jumpVelocity -= GRAVITY_CONSTANT;
+
+                if (playerBottom <= 45) { 
+                    playerBottom = 45; 
+                    jumpVelocity = 0; 
+                    if (currentJumpCount > 0) currentJumpCount = 0;
+                }
+                
+                document.getElementById("playerRider").style.bottom = playerBottom + 'px';
+                moveRunnerElements();
+                animationFrameId = requestAnimationFrame(updateGameFrame);
+            }
+            animationFrameId = requestAnimationFrame(updateGameFrame);
+            spawnInterval = setInterval(() => { if(gameRunning) { if (Math.random() < 0.65) createDynamicObstacle(); else createCoin(); } }, 880);
+        }
+
+        function triggerRunnerJump() {
+            if (gameRunning && currentJumpCount < MAX_JUMP_LIMIT) { 
+                currentJumpCount++; 
+                jumpVelocity = JUMP_FORCE;
+                const rider = document.getElementById("playerRider");
+                if (currentJumpCount === 2) {
+                    rider.style.transform = "scale(1.25) rotate(-10deg)";
+                    setTimeout(() => { rider.style.transform = "scale(1) rotate(0deg)"; }, 150);
+                }
+            }
+        }
+
+        function createDynamicObstacle() {
+            const stage = document.getElementById("runnerStage"); if (!stage) return;
+            const obs = document.createElement("div"); obs.className = "obstacle";
+            let rng = Math.random(), chosen = 'cone';
+            if (rng < 0.35) chosen = 'cone';
+            else if (rng < 0.68) chosen = 'dodgeball';
+            else if (rng < 0.90) chosen = 'sparrow';
+            else chosen = 'instructor';
+            
+            if (chosen === 'cone') { obs.innerText = "⚠️"; obs.style.bottom = "45px"; obs.style.right = "-40px"; } 
+            else if (chosen === 'dodgeball') { obs.innerText = "🏐"; obs.style.bottom = "45px"; obs.style.right = "-40px"; obs.dataset.behavior = "bounce"; obs.dataset.bounceDir = "up"; obs.dataset.bounceVal = "45"; } 
+            else if (chosen === 'sparrow') { obs.innerText = "🐦"; obs.style.bottom = "115px"; obs.style.right = "-40px"; } 
+            else { obs.innerText = "👨‍🏫"; obs.style.bottom = "240px"; obs.style.right = "140px"; obs.dataset.behavior = "drop"; obs.dataset.state = "falling"; }
+            obs.dataset.type = chosen; stage.appendChild(obs);
+        }
+
+        function createCoin() {
+            const stage = document.getElementById("runnerStage"); if (!stage) return;
+            const coin = document.createElement("div"); coin.className = "coin-item";
+            coin.innerText = Math.random() > 0.4 ? "💎" : "🍗"; coin.style.right = "-40px"; coin.style.bottom = (Math.random() * 60 + 80) + "px";
+            stage.appendChild(coin);
+        }
+
+        function moveRunnerElements() {
+            const rider = document.getElementById("playerRider"); if (!rider) return;
+            const riderRect = rider.getBoundingClientRect();
+
+            document.querySelectorAll('.obstacle').forEach(obs => {
+                let right = parseFloat(obs.style.right) || 0;
+                if (obs.dataset.type === 'instructor') {
+                    let bottom = parseFloat(obs.style.bottom) || 0;
+                    if (obs.dataset.state === "falling") {
+                        if (bottom > 45) bottom -= 5.5; else { bottom = 45; obs.dataset.state = "floating"; obs.innerText = "👨‍🏫🪄"; }
+                        obs.style.bottom = bottom + 'px';
+                    } else { right += baseGameSpeed; obs.style.right = right + 'px'; }
+                } else if (obs.dataset.type === 'dodgeball') {
+                    right += baseGameSpeed; obs.style.right = right + 'px';
+                    let bVal = parseFloat(obs.dataset.bounceVal) || 45, bDir = obs.dataset.bounceDir || "up";
+                    if (bDir === "up") { bVal += 3.5; if (bVal >= 110) obs.dataset.bounceDir = "down"; } else { bVal -= 3.5; if (bVal <= 45) obs.dataset.bounceDir = "up"; }
+                    obs.dataset.bounceVal = bVal; obs.style.bottom = bVal + 'px';
+                } else { right += baseGameSpeed; obs.style.right = right + 'px'; }
+
+                if (isColliding(riderRect, obs.getBoundingClientRect())) {
+                    if (obs.dataset.type === 'instructor') {
+                        if (obs.dataset.state !== "falling") {
+                            hasInstructorShield = true; 
+                            updateRiderStateVisuals();
+                            earnedStones += 400; playerStones += 400; 
+                            document.getElementById("scoreText").innerText = `本局賺取: ${earnedStones}`; 
+                            refreshDashboard();
+                            pushLog("👨‍🏫✨ 順利接回落水教官！獲得「教官盾」與 400 晶石！", "ssr-log"); 
+                            obs.remove();
+                        }
+                    } else {
+                        if (isInvincible) return;
+
+                        if (hasInstructorShield) {
+                            hasInstructorShield = false; 
+                            isInvincible = true;
+                            updateRiderStateVisuals(); 
+                            obs.innerText = "💥"; 
+                            pushLog("🛡️✨【教官盾破碎】成功抵消排球/三角錐危機！獲得短暫無敵幀！", "game-log"); 
+                            
+                            document.querySelectorAll('.obstacle').forEach(el => {
+                                if(el.dataset.type !== 'instructor') el.remove();
+                            });
+
+                            setTimeout(() => {
+                                isInvincible = false;
+                                updateRiderStateVisuals();
+                            }, 1200);
+                        } else { 
+                            endRunnerGame(); 
+                        }
+                    }
+                }
+                if (right > 580) obs.remove();
+            });
+
+            document.querySelectorAll('.coin-item').forEach(coin => {
+                let right = parseFloat(coin.style.right) || 0; right += baseGameSpeed; coin.style.right = right + 'px';
+                if (isColliding(riderRect, coin.getBoundingClientRect())) {
+                    let isChicken = coin.innerText === "🍗";
+                    let reward = isChicken ? 150 : 120; earnedStones += reward; playerStones += reward;
+                    document.getElementById("scoreText").innerText = `本局賺取: ${earnedStones}`; refreshDashboard(); 
+                    
+                    if(isChicken) {
+                        pushLog("🍗 獲取了香雞排！紫槓學姊在榕園的迷霧中默默注視著你的三角函數成績...", "game-log");
+                    }
+                    coin.remove();
+                }
+                if (right > 580) coin.remove();
+            });
+        }
+
+        function updateRiderStateVisuals() {
+            const rider = document.getElementById("playerRider"); if (!rider) return;
+            rider.className = "";
+            if (hasInstructorShield) { 
+                rider.innerText = "🚣‍♀️👑"; 
+                rider.classList.add("ins-shield-active"); 
+            } else if (isInvincible) {
+                rider.innerText = "🚣‍♀️"; 
+                rider.classList.add("iframe-invincible"); 
+            } else { 
+                rider.innerText = "🚣‍♀️"; 
+            }
+        }
+
+        function isColliding(rect1, rect2) {
+            return !(rect1.right < rect2.left + 12 || rect1.left > rect2.right - 12 || rect1.bottom < rect2.top + 12 || rect1.top > rect2.bottom - 12);
+        }
+
+        function endRunnerGame() {
+            gameRunning = false; if (animationFrameId) cancelAnimationFrame(animationFrameId); clearInterval(spawnInterval);
+            document.getElementById("playerRider").innerText = "💥"; document.getElementById("gameStartBtn").disabled = false;
+            document.getElementById("playerRider").className = ""; 
+            document.getElementById("gameTimer").innerText = "💀 狀態: 翻船結束"; 
+            document.getElementById("scoreText").innerText = `總賺取: ${earnedStones}`;
+            pushLog(`【航海結束】共挺過 🚩 ${Math.floor(gameDistance)} 公尺，獲得 💎 ${earnedStones} 聖晶石！`, "game-log");
+        }
+
+        function resetClickerVisuals() {
+            clickerTimeLeft = 15; clickerCount = 0;
+            document.getElementById("clickTargetBtn").disabled = true;
+            document.getElementById("clickerAvatar").innerText = "🏃‍♀️"; document.getElementById("clickerAvatar").style.transform = "scale(1)";
+        }
+
+        function startClickerGame() {
+            resetClickerVisuals(); document.getElementById("clickTargetBtn").disabled = false;
+            document.getElementById("gameTitleStatus").innerText = "⏰ 倒數衝刺！壓線校門口！";
+            document.getElementById("gameTimer").innerText = `剩餘時間: ${clickerTimeLeft}s`;
+
+            countdownInterval = setInterval(() => {
+                clickerTimeLeft--; document.getElementById("gameTimer").innerText = `剩餘時間: ${clickerTimeLeft}s`;
+                const av = document.getElementById("clickerAvatar"); av.innerText = av.innerText === "🏃‍♀️" ? "🏃" : "🏃‍♀️";
+                if (clickerTimeLeft <= 0) endClickerGame();
+            }, 1000);
+        }
+
+        function performClickAction(e) {
+            if (currentMode !== 'clicker' || !gameRunning) return;
+            if(e && e.blur) e.blur();
+            clickerCount++; earnedStones += 10; playerStones += 10;
+            document.getElementById("scoreText").innerText = `本局賺取: ${earnedStones}`; refreshDashboard();
+            if (clickerCount >= 120) unlockBadge("badge-click120");
+            document.getElementById("clickerAvatar").style.transform = `scale(${1 + (clickerCount % 4) * 0.06})`;
+        }
+
+        function endClickerGame() {
+            gameRunning = false; clearInterval(countdownInterval);
+            document.getElementById("clickTargetBtn").disabled = true; document.getElementById("gameStartBtn").disabled = false;
+            pushLog(`【衝刺結束】前進了 ${clickerCount} 步，撈走 💎 ${earnedStones} 聖晶石。`, "game-log");
+        }
+
+        function initStaticZebraGrid() {
+            const grid = document.getElementById("zebraGrid"); if (!grid) return;
+            grid.innerHTML = "";
+            for (let i = 0; i < 36; i++) {
+                const item = document.createElement("div"); item.className = "zebra-block"; item.style.background = "#222"; item.innerText = "💤"; grid.appendChild(item);
+            }
+        }
+
+        function startBoomGame() {
+            boomTimeLeft = 15; totalZbrasPopped = 0;
+            document.getElementById("gameTitleStatus").innerText = "🦓 小斑馬連擊大爆破中！";
+            document.getElementById("gameTimer").innerText = `剩餘時間: ${boomTimeLeft}s`;
+            pushLog("【爆破啟動】瘋狂消除相連的小斑馬方塊！", "game-log");
+            generateZebraGridData(); renderZebraGrid();
+            countdownInterval = setInterval(() => {
+                boomTimeLeft--; document.getElementById("gameTimer").innerText = `剩餘時間: ${boomTimeLeft}s`;
+                if (boomTimeLeft <= 0) endBoomGame();
+            }, 1000);
+        }
+
+        function generateZebraGridData() {
+            zebraGridData = [];
+            for (let r = 0; r < 6; r++) {
+                let row = []; for (let c = 0; c < 6; c++) { row.push(Math.floor(Math.random() * zebraStyles.length)); } zebraGridData.push(row);
+            }
+        }
+
+        function renderZebraGrid() {
+            const grid = document.getElementById("zebraGrid"); if (!grid) return;
+            grid.innerHTML = "";
+            for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 6; c++) {
+                    const styleIdx = zebraGridData[r][c]; const cell = document.createElement("div"); cell.className = "zebra-block";
+                    if (styleIdx !== null && styleIdx !== undefined) {
+                        const styleObj = zebraStyles[styleIdx]; cell.classList.add(styleObj.className); cell.innerText = styleObj.emoji;
+                        cell.onclick = (e) => { e.stopPropagation(); handleZebraBlockClick(r, c); };
+                    } else { cell.style.background = "transparent"; cell.style.boxShadow = "none"; }
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function handleZebraBlockClick(r, c) {
+            if (!gameRunning || currentMode !== 'boom') return;
+            const matchIdx = zebraGridData[r][c]; if (matchIdx === null) return;
+
+            let queue = [[r, c]], matched = [];
+            let visited = Array.from({ length: 6 }, () => Array(6).fill(false)); visited[r][c] = true;
+            const dr = [-1, 1, 0, 0], dc = [0, 0, -1, 1];
+
+            while (queue.length > 0) {
+                let [cr, cc] = queue.shift(); matched.push([cr, cc]);
+                for (let i = 0; i < 4; i++) {
+                    let nr = cr + dr[i], nc = cc + dc[i];
+                    if (nr >= 0 && nr < 6 && nc >= 0 && nc < 6) {
+                        if (!visited[nr][nc] && zebraGridData[nr][nc] === matchIdx) { visited[nr][nc] = true; queue.push([nr, nc]); }
+                    }
+                }
             }
 
+            if (matched.length >= 2) {
+                totalZbrasPopped += matched.length; let basePoints = matched.length * 15; earnedStones += basePoints; playerStones += basePoints;
+                document.getElementById("scoreText").innerText = `本局賺取: ${earnedStones}`; refreshDashboard();
+                matched.forEach(([mr, mc]) => { zebraGridData[mr][mc] = null; });
+                if (totalZbrasPopped >= 100) unlockBadge("badge-boom15");
+                applyZebraGravity(); renderZebraGrid();
+            }
+        }
+
+        function applyZebraGravity() {
+            for (let c = 0; c < 6; c++) {
+                let emptyRow = 5;
+                for (let r = 5; r >= 0; r--) {
+                    if (zebraGridData[r][c] !== null) {
+                        if (r !== emptyRow) { zebraGridData[emptyRow][c] = zebraGridData[r][c]; zebraGridData[r][c] = null; }
+                        emptyRow--;
+                    }
+                }
+                for (let r = emptyRow; r >= 0; r--) { zebraGridData[r][c] = Math.floor(Math.random() * zebraStyles.length); }
+            }
+        }
+
+        function endBoomGame() {
+            gameRunning = false; clearInterval(countdownInterval);
+            document.getElementById("gameStartBtn").disabled = false; document.getElementById("gameTimer").innerText = "狀態: 爆破結束";
+            pushLog(`【爆破結算】共消除 🦓 ${totalZbrasPopped} 隻小斑馬，狂賺 💎 ${earnedStones} 聖晶石！`, "game-log");
+            initStaticZebraGrid();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                if (!gameRunning) return; e.preventDefault(); 
+                if (currentMode === 'runner') triggerRunnerJump();
+                else if (currentMode === 'clicker') performClickAction(e);
+            }
+        });
+
+        window.gacha = function(times) {
+            if (gameRunning) forceEndAnyGame();
+            if (isNaN(playerStones) || playerStones === undefined) playerStones = 3200;
+
+            const cost = times * 160;
+            if (playerStones < cost) { alert("💎 聖晶石不夠啦！快玩下方的遊戲大賺一筆！"); return; }
             playerStones -= cost;
-            const wall = document.getElementById("cardDisplayWall");
+
+            const wall = document.getElementById("cardDisplayWall"); if(!wall) return;
             wall.innerHTML = ""; 
 
             for (let i = 0; i < times; i++) {
-                totalSummons++;
-                pityCounter++; 
+                totalSummons++; pityCounter++; let rarity = "R"; const roll = Math.random() * 100;
+
+                if (pityCounter === 100) { rarity = "SSR"; pityCounter = 0; pushLog(`✨ [大保底] 觸發 100 抽保底軌跡！`, "ssr-log"); } 
+                else {
+                    if (roll < 1.0) rarity = "UR";
+                    else if (roll < 4.0) rarity = "SSR";
+                    else if (roll < 30.0) rarity = "SR";
+                    else rarity = "R";
+                    if (rarity === "SSR") pityCounter = 0;
+                }
+
+                const pool = HERO_DATABASE[rarity]; const hero = pool[Math.floor(Math.random() * pool.length)];
+                if (totalSummons >= 1) unlockBadge("badge-gacha1");
+                if (totalSummons >= 50) unlockBadge("badge-gacha50");
+
+                const cardPerspective = document.createElement("div"); cardPerspective.className = `card-perspective ${rarity}`;
+                cardPerspective.dataset.name = hero.name; cardPerspective.dataset.rarity = rarity; cardPerspective.dataset.type = hero.type; cardPerspective.dataset.desc = hero.desc;
                 
-                let rarity = "R";
-                const roll = Math.random() * 100;
-
-                if (pityCounter === 100) {
-                    rarity = "SSR";
-                    pityCounter = 0; 
-                    pushLog(`✨ [保底系統] 觸發 100 抽命定星軌！必出 SSR！`, "ssr-log");
-                } else {
-                    if (roll < 0.3) {
-                        rarity = "UR";   
-                    } else if (roll < 3.3) {
-                        rarity = "SSR";  
-                    } else if (roll < 18.3) {
-                        rarity = "SR";   
-                    } else {
-                        if (times === 10 && i === 9) {
-                            rarity = "SR";
-                        } else {
-                            rarity = "R";
-                        }
-                    }
-
-                    if (rarity === "SSR") {
-                        pushLog(`🎉 [天選之人] 在第 ${pityCounter} 抽提前斬獲 SSR！保底重置！`, "ssr-log");
-                        pityCounter = 0; 
-                    }
-                }
-
-                if (rarity === "UR") {
-                    pushLog(`👑 【神蹟降臨】星域劇烈震動！你成功召喚了創世神話 UR！`, "ur-log");
-                }
-
-                const pool = HERO_DATABASE[rarity];
-                const hero = pool[Math.floor(Math.random() * pool.length)];
-
-                const card = document.createElement("div");
-                card.className = `mega-card ${rarity}`;
-                card.innerHTML = `
-                    <div class="card-rarity-tag">✦ ${rarity}</div>
-                    <div class="card-hero-name">${hero.name}</div>
-                    <div class="card-footer-type">${hero.type}</div>
-                    <div class="click-hint">點擊查看資訊</div>
+                cardPerspective.innerHTML = `
+                    <div class="card-flip-container">
+                        <div class="card-back"><div class="card-back-pattern"><div class="card-back-crest">🏫</div></div></div>
+                        <div class="card-front">
+                            <div class="card-rarity-tag">✦ ${rarity}</div>
+                            <div class="card-hero-name">${hero.name}</div>
+                            <div class="card-footer-type">${hero.type}</div>
+                        </div>
+                    </div>
                 `;
                 
-                card.addEventListener("click", () => openModal(hero, rarity));
-                wall.appendChild(card);
+                cardPerspective.addEventListener("click", function(e) {
+                    e.stopPropagation(); 
+                    if (!this.classList.contains("revealed")) this.classList.add("revealed");
+                    else openModal(this.dataset.name, this.dataset.rarity, this.dataset.type, this.dataset.desc);
+                });
 
-                let logStyle = "";
-                if (rarity === "UR") logStyle = "ur-log";
-                else if (rarity === "SSR") logStyle = "ssr-log";
-                else if (rarity === "SR") logStyle = "sr-log";
-                pushLog(`召喚獲得：【${rarity}】${hero.name} (${hero.type})`, logStyle);
+                setTimeout(() => { cardPerspective.classList.add("revealed"); }, 150 + (i * 120));
+                wall.appendChild(cardPerspective);
+
+                let logStyle = rarity === "UR" ? "ur-log" : (rarity === "SSR" ? "ssr-log" : (rarity === "SR" ? "sr-log" : "r-log"));
+                pushLog(`召喚成功：【${rarity}】${hero.name}`, logStyle);
             }
             refreshDashboard();
         }
 
-        /* 🖼️ 彈窗功能 */
-        function openModal(hero, rarity) {
-            const overlay = document.getElementById("modalOverlay");
-            const banner = document.getElementById("modalBanner");
-            const title = document.getElementById("modalTitle");
+        function openModal(name, rarity, type, desc) {
+            const overlay = document.getElementById("modalOverlay"); const banner = document.getElementById("modalBanner"); const title = document.getElementById("modalTitle");
+            if (rarity === "UR") { banner.style.background = "var(--ur-bg)"; title.style.color = "var(--ur-color)"; } 
+            else if (rarity === "SSR") { banner.style.background = "var(--ssr-bg)"; title.style.color = "var(--ssr-color)"; } 
+            else if (rarity === "SR") { banner.style.background = "var(--sr-bg)"; title.style.color = "var(--sr-color)"; } 
+            else { banner.style.background = "var(--r-bg)"; title.style.color = "var(--r-color)"; }
 
-            if (rarity === "UR") {
-                banner.style.background = "var(--ur-bg)"; banner.style.color = "#fff"; title.style.color = "var(--ur-color)";
-            } else if (rarity === "SSR") {
-                banner.style.background = "var(--ssr-bg)"; banner.style.color = "var(--ssr-color)"; title.style.color = "var(--ssr-color)";
-            } else if (rarity === "SR") {
-                banner.style.background = "var(--sr-bg)"; banner.style.color = "var(--sr-color)"; title.style.color = "var(--sr-color)";
-            } else {
-                banner.style.background = "var(--r-bg)"; banner.style.color = "var(--r-color)"; title.style.color = "var(--r-color)";
-            }
-
-            if (hero.img && hero.img !== "") {
-                banner.innerHTML = `<img src="${hero.img}" style="width:100%; height:100%; object-fit:cover;">`;
-            } else {
-                banner.innerText = rarity;
-            }
-
-            title.innerText = hero.name;
-            document.getElementById("modalRarity").innerText = rarity;
-            document.getElementById("modalAttr").innerText = hero.type;
-            document.getElementById("modalDesc").innerText = hero.desc;
+            banner.innerText = rarity; title.innerText = name;
+            document.getElementById("modalRarity").innerText = rarity; document.getElementById("modalAttr").innerText = type; document.getElementById("modalDesc").innerText = desc;
             overlay.style.display = "flex";
         }
 
         function closeModal() { document.getElementById("modalOverlay").style.display = "none"; }
         document.getElementById("modalOverlay").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
 
-
-        /* 🎮 三消連爆遊戲邏輯 */
-        function startPuzzleGame() {
-            if (gameActive) return;
-            gameActive = true;
-            gameTimeLeft = 30;
-            earnedStones = 0;
-
-            document.getElementById("gameStartBtn").disabled = true;
-            document.getElementById("gameStartBtn").innerText = "爆破矩陣運作中";
-            document.getElementById("scoreText").innerText = "賺取晶石: 0";
-            pushLog("【系統】解鎖元素爆破矩陣！點擊同色聚集處觸發連鎖！", "game-log");
-
-            initBoard();
-            renderBoard();
-
-            gameInterval = setInterval(() => {
-                gameTimeLeft--;
-                document.getElementById("gameTimer").innerText = `剩餘時間: ${gameTimeLeft}s`;
-                if (gameTimeLeft <= 0) stopPuzzleGame();
-            }, 1000);
-        }
-
-        function initBoard() {
-            boardState = [];
-            for (let r = 0; r < ROWS; r++) {
-                let row = [];
-                for (let c = 0; c < COLS; c++) {
-                    row.push(TYPES[Math.floor(Math.random() * TYPES.length)]);
-                }
-                boardState.push(row);
-            }
-        }
-
-        function renderBoard() {
-            const boardEl = document.getElementById("puzzleBoard");
-            boardEl.innerHTML = "";
-
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    const type = boardState[r][c];
-                    const block = document.createElement("div");
-                    block.className = `puzzle-block block-${type}`;
-                    block.innerText = type === 'empty' ? '' : TYPE_ICONS[type];
-                    if (type !== 'empty') block.onclick = () => clickBlock(r, c);
-                    boardEl.appendChild(block);
-                }
-            }
-        }
-
-        function clickBlock(r, c) {
-            if (!gameActive) return;
-            const targetType = boardState[r][c];
-            if (targetType === 'empty') return;
-
-            let connected = [];
-            let queue = [[r, c]];
-            let visited = Array(ROWS).fill().map(() => Array(COLS).fill(false));
-            visited[r][c] = true;
-
-            while (queue.length > 0) {
-                let [currR, currC] = queue.shift();
-                connected.push([currR, currC]);
-
-                const dirs = [[-1,0], [1,0], [0,-1], [0,1]];
-                for (let [dr, dc] of dirs) {
-                    let nr = currR + dr; let nc = currC + dc;
-                    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
-                        if (!visited[nr][nc] && boardState[nr][nc] === targetType) {
-                            visited[nr][nc] = true; queue.push([nr, nc]);
-                        }
-                    }
-                }
-            }
-
-            if (connected.length >= 2) {
-                connected.forEach(([cr, cc]) => { boardState[cr][cc] = 'empty'; });
-                let count = connected.length;
-                let reward = Math.floor(count * 50 * (1 + count * 0.1)); 
-                playerStones += reward; earnedStones += reward;
-                document.getElementById("scoreText").innerText = `賺取晶石: ${earnedStones}`;
-                refreshDashboard();
-                applyGravity();
-                renderBoard();
-            }
-        }
-
-        function applyGravity() {
-            for (let c = 0; c < COLS; c++) {
-                let availableRow = ROWS - 1;
-                for (let r = ROWS - 1; r >= 0; r--) {
-                    if (boardState[r][c] !== 'empty') {
-                        let temp = boardState[r][c];
-                        boardState[r][c] = 'empty';
-                        boardState[availableRow][c] = temp;
-                        availableRow--;
-                    }
-                }
-                for (let r = availableRow; r >= 0; r--) {
-                    boardState[r][c] = TYPES[Math.floor(Math.random() * TYPES.length)];
-                }
-            }
-        }
-
-        function stopPuzzleGame() {
-            gameActive = false;
-            clearInterval(gameInterval);
-            const boardEl = document.getElementById("puzzleBoard");
-            boardEl.innerHTML = `<div style="grid-column: span 6; margin-top: 130px; color:#555; font-size:14px; text-align:center;">矩陣冷卻中...</div>`;
-            document.getElementById("gameStartBtn").disabled = false;
-            document.getElementById("gameStartBtn").innerText = "啟動爆破矩陣 (30秒)";
-            document.getElementById("gameTimer").innerText = `剩餘時間: 0s`;
-            pushLog(`【試煉結束】透過元素大連爆，一口氣狂賺了 💎 ${earnedStones} 聖晶石！`, "game-log");
-        }
-
-        window.onload = function() { 
-            refreshDashboard(); 
-            initPoolPreview(); // 初始化卡池清單
-        };
+        window.onload = function() { initParticles(); refreshDashboard(); initPoolPreview(); switchGameMode('runner'); };
     </script>
 </body>
 </html>
