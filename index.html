@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聖域召喚：星位降臨 - 雄女生活傳說版 4.0</title>
+    <title>聖域召喚：星位降臨 - 雄女正統生活傳說版 5.5</title>
     <style>
         :root {
             --ur-color: #ff3366;
@@ -250,7 +250,7 @@
         .history-observatory {
             width: 380px; background: var(--panel-bg); border: 1px solid var(--panel-border);
             border-radius: 20px; padding: 22px; box-sizing: border-box;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; height: 930px; gap: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7); display: flex; flex-direction: column; height: 1030px; gap: 15px;
             backdrop-filter: blur(10px);
         }
         .history-observatory h3 { margin: 0; font-size: 17px; color: #f39c12; border-bottom: 2px solid rgba(243,156,18,0.2); padding-bottom: 8px; letter-spacing: 1px; }
@@ -264,12 +264,26 @@
             background: linear-gradient(90deg, rgba(74,59,0,0.4), rgba(20,24,34,0.8)) !important;
             border: 1px solid rgba(255,215,0,0.2);
         }
+        .achievement-row.secret-row {
+            border: 1px dashed rgba(255, 51, 102, 0.2) !important;
+            background: rgba(255, 51, 102, 0.01);
+        }
+        .achievement-row.secret-row.unlocked-row {
+            background: linear-gradient(90deg, rgba(45, 11, 61, 0.5), rgba(20, 24, 34, 0.85)) !important;
+            border: 1px solid rgba(255, 51, 102, 0.4) !important;
+        }
+
         .badge.unlocked { 
             filter: grayscale(0) !important; 
             opacity: 1 !important; 
             border-color: #ffd700 !important; 
             background: #3a2e05 !important; 
             box-shadow: 0 0 12px rgba(255,215,0,0.5); 
+        }
+        .badge.secret-badge.unlocked {
+            border-color: #ff3366 !important;
+            background: #2d0b3d !important;
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.7);
         }
 
         .pool-preview-zone { flex: 1; overflow-y: auto; text-align: left; display: flex; flex-direction: column; gap: 12px; }
@@ -312,7 +326,7 @@
     <div class="bg-particles" id="bgParticles"></div>
 
     <h1>✨ 聖域召喚：星位降臨 ✨</h1>
-    <div class="subtitle">—— 雄女生活傳說・正統極致考據修正版 4.0 ——</div>
+    <div class="subtitle">—— 雄女生活傳說・正統極致考據修正版 5.5 ——</div>
 
     <div class="header-panel">
         <div>💎 聖晶石: <span id="stoneCount" class="stone-display">3200</span></div>
@@ -426,15 +440,24 @@
                         <div style="text-align: left;"><div style="font-size: 13px; font-weight: bold; color: #ffd700;">斑馬爆破大師</div><div style="font-size: 11px; color: #9ca3af;">單局消除小斑馬超過 100 隻</div></div>
                     </div>
 
+                    <!-- 隱藏成就 -->
+                    <div class="achievement-row secret-row" id="row-secretUR" style="display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 8px; transition: all 0.3s;">
+                        <div class="badge secret-badge" id="badge-secretUR">👑</div>
+                        <div style="text-align: left;">
+                            <div id="secretTitle" style="font-size: 13px; font-weight: bold; color: #ff3366;">🔒 未知隱藏成就</div>
+                            <div id="secretDesc" style="font-size: 11px; color: #6b7280;">達成特定的命定星軌因果律後解鎖</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <h3>📜 聖域觀測紀錄</h3>
+            <h3><h3>📜 聖域觀測紀錄</h3>
             <div class="pity-counter-box">
                 <div>距離 100 抽必出 SSR 還差: <span id="pityCount" class="pity-number">100</span> 抽</div>
             </div>
             <div class="history-log-stream" id="historyLogStream">
-                <div style="color: #555;">[系統] 雄女學測大考結界與地瓜防禦矩陣已校準完畢。</div>
+                <div style="color: #555;">[系統] 雄女大考結界與 113 常溫送風空調矩陣已同步校準。</div>
             </div>
 
             <h3>🔮 聖域現世卡池一覽</h3>
@@ -459,17 +482,18 @@
         const HERO_DATABASE = {
             UR: [
                 { name: "榕園的紫槓學姊", type: "正統悲愴都市傳說", desc: "【UR 級殿堂神話】雄女最著名且最靈驗的都市傳說。相傳她是過去不幸在榕園自殺的學姊，靈魂化為守護結界。校園中流傳著極其精準的考核秘令：只要在深夜 12 點，帶著「雞排」與「珍奶」前往榕園呼喚她，學姊就會在夜霧中現身——不為索命，而是會溫柔且清晰地親自教你最令人崩潰的「三角函數」！是無數數學苦難學妹的終極救星。" },
-                { name: "淹水的操場(雄女湖)", type: "史詩天災景觀", desc: "【UR 級宏偉災景】高雄暴雨限定的終極奇觀。每逢大雨，整個操場便會在短時間內化為汪洋一片，水深直接及膝，司令台瞬間變成孤獨的碼頭。這是全校師生共同擁有的宏偉生活記憶，更是專屬於雄女人的壯麗傳奇景緻！" }
+                { name: "淹水的操場(雄女湖)", type: "史詩天災景觀", desc: "【UR 級宏偉災景】高雄暴雨限定的終極奇觀。每逢大雨，整個操場便會在短時間內化為汪洋一片，水深直接及膝，司令台瞬間變成孤獨的碼頭。這是全校師生共同擁有的宏偉生活記憶，幕後更凝聚著雄女人的壯麗傳奇景緻！" }
             ],
             SSR: [
                 { name: "113外掃區掃具區", type: "終極怨念結界", desc: "【SSR 級血肉磨坊】放學鐘聲響起時最不情願踏入的地獄。這裡不僅凝聚了永遠掃不完的枯枝落葉、極難操縱的竹掃把，更恐怖的是鋪天蓋地的「小黑蚊與蚊子大軍」！每次前去打掃都必須用肉身與成群嗜血的蚊子生死搏鬥，堪稱全校怨念密度最高的地方。" },
                 { name: "藝能大樓電梯", type: "垂直移動迷宮", desc: "【SSR 級時空扭曲機】每天早補或第一節課絕對是最難搭到的終極地獄模式！眼看鐘聲就要響起，電梯前卻擠滿了絕望的靈魂，每層樓都停、速度慢到讓人懷疑人生，堪稱雄女人的遲到終結者與耐力大考驗！" }
             ],
             SR: [
-                { name: "黑冠麻鷺 (地瓜)", type: "學測分科強制轉向神獸", desc: "【SR 級 大考終結因果鳥】常駐於校內草坪上、看起來呆萌卻背負著恐怖因果律的大笨鳥。雄女高三學妹間流傳著一條絕對不可觸碰的鐵律：『在學測前夕，千萬不能去嚇地瓜！』如果不信邪或白目跑去嚇到牠，大考結界的魔咒就會被瞬間觸發，你將會面臨極其慘烈的現世報——直接被強制保送、落入 7 月份的分科測驗地獄！" },
-                { name: "排球場線外發球手", type: "體育課終極試煉", desc: "【SR 級高手】頂著高雄烈日，在排球場上使出渾身解數，只求發球能精準過網的熱血代名詞。" }
+                { name: "黑冠麻鷺 (地瓜)", type: "學測分科強制轉向神獸", desc: "【SR 級 大考終結因果鳥】常駐於校內草坪上、看起來呆萌卻背負著恐怖因果律的大笨鳥。雄女高三學妹間流傳著一條絕對不可觸碰的鐵律：『在學測前夕，千萬不能去嚇地瓜！』如果不信邪或白目跑去嚇到牠，大大考結界的魔咒就會被瞬間觸發，你將會面臨極其慘烈的現世報——直接被強制保送、落入 7 月份的分科測驗地獄！" },
+                { name: "英文四合一講義", type: "文科噩夢核心", desc: "【SR 級 萬惡之源】印刷樸素卻威力無窮的學術重規。雖然封面常常寫著熱情洋溢的四合一名稱，但在雄女人口中卻更常被戲稱為愛恨交織的『Four in love』。厚重且扎實的內容裡填滿了無窮無盡的單字、片語、克漏字與文法測驗，每到大考前夕更是吞噬無數少女深夜睡眠的恐怖精神黑洞，絕對是雄女歲月中最具代表性的萬惡之源。" }
             ],
             R: [
+                { name: "113冷氣", type: "高耗能常溫送風矩陣", desc: "【R 級 頑固型機械日常】113大樓內部最讓人無奈的夏日景觀。這台冷氣絕不至於惡劣到吹出熱風折磨人，相反地，它極具職業道德，始終伴隨著巨大且敬業的機器轟鳴聲——然而，吹出來的風永遠都只是最純粹的「常溫送風」。無論在遙控器上把溫度調到多低、在機身下怎麼拍打，它都依然故我、毫無動搖，是全班同學在烈日下擦汗懷疑人生的堅毅存在。" },
                 { name: "皮炎", type: "大考救贖神獸", desc: "【R 級 班級鎮殿寵物】真實身份是《貓貓蟲咖波》裡面的那隻軟萌『狗狗』！負責默默趴在抽屜或課桌椅一角，幫大家吸走所有模擬考與作業的龐大壓力。" },
                 { name: "校園小麻雀", type: "群聚飛羽生物", desc: "【R 級 跑道常駐生物】平時成群在操場跑道上啄食的可愛鳥鳥，即使面對暴雨，依舊在低空滑翔。" }
             ]
@@ -547,13 +571,24 @@
                 unlockedBadges.push(id);
                 const el = document.getElementById(id);
                 if (el) {
-                    el.classList.add("unlocked");
-                    const rowId = id.replace("badge-", "row-");
-                    const rowEl = document.getElementById(rowId);
-                    if (rowEl) rowEl.classList.add("unlocked-row");
-                    
-                    let nameText = rowEl ? rowEl.querySelector('div div').innerText : "新成就";
-                    pushLog(`🏆【解鎖成就】${nameText}！`, "ssr-log");
+                    let isSecret = el.classList.contains("secret-badge");
+                    if (isSecret) {
+                        el.classList.add("unlocked");
+                        const rowEl = document.getElementById("row-secretUR");
+                        if (rowEl) rowEl.classList.add("unlocked-row");
+                        document.getElementById("secretTitle").innerText = "🏆 歐皇的逆天改命";
+                        document.getElementById("secretTitle").style.color = "#ff3366";
+                        document.getElementById("secretDesc").innerText = "達成隱藏條件：在 100 抽内逆天改命抽中稀有 UR！";
+                        document.getElementById("secretDesc").style.color = "#ff88a8";
+                        pushLog(`👑【解鎖隱藏成就】歐皇的逆天改命！在100抽保底內強行奪取 UR 軌跡！`, "ur-log");
+                    } else {
+                        el.classList.add("unlocked");
+                        const rowId = id.replace("badge-", "row-");
+                        const rowEl = document.getElementById(rowId);
+                        if (rowEl) rowEl.classList.add("unlocked-row");
+                        let nameText = rowEl ? rowEl.querySelector('div div').innerText : "新成就";
+                        pushLog(`🏆【解鎖成就】${nameText}！`, "ssr-log");
+                    }
                 }
             }
         }
@@ -736,7 +771,7 @@
             else chosen = 'instructor';
             
             if (chosen === 'cone') { obs.innerText = "⚠️"; obs.style.bottom = "45px"; obs.style.right = "-40px"; } 
-            else if (chosen === 'dodgeball') { obs.innerText = "🏐"; obs.style.bottom = "45px"; obs.style.right = "-40px"; obs.dataset.behavior = "bounce"; obs.dataset.bounceDir = "up"; obs.dataset.bounceVal = "45"; } 
+            else if (chosen === 'dodgeball') { obs.innerText = "📚"; obs.style.bottom = "45px"; obs.style.right = "-40px"; obs.dataset.behavior = "bounce"; obs.dataset.bounceDir = "up"; obs.dataset.bounceVal = "45"; } 
             else if (chosen === 'sparrow') { obs.innerText = "🐦"; obs.style.bottom = "115px"; obs.style.right = "-40px"; } 
             else { obs.innerText = "👨‍🏫"; obs.style.bottom = "240px"; obs.style.right = "140px"; obs.dataset.behavior = "drop"; obs.dataset.state = "falling"; }
             obs.dataset.type = chosen; stage.appendChild(obs);
@@ -787,7 +822,7 @@
                             isInvincible = true;
                             updateRiderStateVisuals(); 
                             obs.innerText = "💥"; 
-                            pushLog("🛡️✨【教官盾破碎】成功抵消排球/三角錐危機！獲得短暫無敵幀！", "game-log"); 
+                            pushLog("🛡️✨【教官盾破碎】成功抵消四合一講義/三角錐危機！獲得短暫無敵幀！", "game-log"); 
                             
                             document.querySelectorAll('.obstacle').forEach(el => {
                                 if(el.dataset.type !== 'instructor') el.remove();
@@ -994,62 +1029,89 @@
 
                 if (pityCounter === 100) { rarity = "SSR"; pityCounter = 0; pushLog(`✨ [大保底] 觸發 100 抽保底軌跡！`, "ssr-log"); } 
                 else {
-                    if (roll < 1.0) rarity = "UR";
+                    if (roll < 1.0) {
+                        rarity = "UR";
+                        // 判定隱藏成就：100抽内（包含第1~99抽，尚未踩到保底Reset前）抽中UR
+                        unlockBadge("badge-secretUR");
+                    }
                     else if (roll < 4.0) rarity = "SSR";
                     else if (roll < 30.0) rarity = "SR";
                     else rarity = "R";
-                    if (rarity === "SSR") pityCounter = 0;
                 }
 
-                const pool = HERO_DATABASE[rarity]; const hero = pool[Math.floor(Math.random() * pool.length)];
-                if (totalSummons >= 1) unlockBadge("badge-gacha1");
-                if (totalSummons >= 50) unlockBadge("badge-gacha50");
+                if (rarity === "SSR") pityCounter = 0;
 
-                const cardPerspective = document.createElement("div"); cardPerspective.className = `card-perspective ${rarity}`;
-                cardPerspective.dataset.name = hero.name; cardPerspective.dataset.rarity = rarity; cardPerspective.dataset.type = hero.type; cardPerspective.dataset.desc = hero.desc;
+                const pool = HERO_DATABASE[rarity];
+                const hero = pool[Math.floor(Math.random() * pool.length)];
+
+                const cardPerspective = document.createElement("div");
+                cardPerspective.className = `card-perspective ${rarity}`;
                 
                 cardPerspective.innerHTML = `
                     <div class="card-flip-container">
-                        <div class="card-back"><div class="card-back-pattern"><div class="card-back-crest">🏫</div></div></div>
+                        <div class="card-back">
+                            <div class="card-back-pattern">
+                                <div class="card-back-crest">🔮</div>
+                                <div style="font-size:10px; color:rgba(255,255,255,0.3); font-weight:bold;">KGHS</div>
+                            </div>
+                        </div>
                         <div class="card-front">
-                            <div class="card-rarity-tag">✦ ${rarity}</div>
+                            <div class="card-rarity-tag">${rarity}</div>
                             <div class="card-hero-name">${hero.name}</div>
-                            <div class="card-footer-type">${hero.type}</div>
+                            <div class="card-footer-type">${hero.type.substring(0,8)}</div>
                         </div>
                     </div>
                 `;
-                
-                cardPerspective.addEventListener("click", function(e) {
-                    e.stopPropagation(); 
-                    if (!this.classList.contains("revealed")) this.classList.add("revealed");
-                    else openModal(this.dataset.name, this.dataset.rarity, this.dataset.type, this.dataset.desc);
-                });
 
-                setTimeout(() => { cardPerspective.classList.add("revealed"); }, 150 + (i * 120));
+                cardPerspective.onclick = () => openModal(hero.name, rarity, hero.type, hero.desc);
                 wall.appendChild(cardPerspective);
 
-                let logStyle = rarity === "UR" ? "ur-log" : (rarity === "SSR" ? "ssr-log" : (rarity === "SR" ? "sr-log" : "r-log"));
-                pushLog(`召喚成功：【${rarity}】${hero.name}`, logStyle);
+                setTimeout(() => { cardPerspective.classList.add("revealed"); }, i * 120);
+
+                let logColor = "r-log";
+                if (rarity === "UR") logColor = "ur-log";
+                else if (rarity === "SSR") logColor = "ssr-log";
+                else if (rarity === "SR") logColor = "sr-log";
+                pushLog(`召喚出 [${rarity}] ${hero.name}`, logColor);
             }
+
+            unlockBadge("badge-gacha1");
+            if (totalSummons >= 50) unlockBadge("badge-gacha50");
+
             refreshDashboard();
-        }
+        };
 
-        function openModal(name, rarity, type, desc) {
-            const overlay = document.getElementById("modalOverlay"); const banner = document.getElementById("modalBanner"); const title = document.getElementById("modalTitle");
-            if (rarity === "UR") { banner.style.background = "var(--ur-bg)"; title.style.color = "var(--ur-color)"; } 
-            else if (rarity === "SSR") { banner.style.background = "var(--ssr-bg)"; title.style.color = "var(--ssr-color)"; } 
-            else if (rarity === "SR") { banner.style.background = "var(--sr-bg)"; title.style.color = "var(--sr-color)"; } 
-            else { banner.style.background = "var(--r-bg)"; title.style.color = "var(--r-color)"; }
+        function openModal(name, rarity, attr, desc) {
+            document.getElementById("modalTitle").innerText = name;
+            
+            let rTag = document.getElementById("modalRarity");
+            rTag.innerText = rarity; rTag.className = "";
+            if(rarity === "UR") rTag.style.color = "var(--ur-color)";
+            else if(rarity === "SSR") rTag.style.color = "var(--ssr-color)";
+            else if(rarity === "SR") rTag.style.color = "var(--sr-color)";
+            else rTag.style.color = "var(--r-color)";
 
-            banner.innerText = rarity; title.innerText = name;
-            document.getElementById("modalRarity").innerText = rarity; document.getElementById("modalAttr").innerText = type; document.getElementById("modalDesc").innerText = desc;
-            overlay.style.display = "flex";
+            document.getElementById("modalAttr").innerText = attr;
+            document.getElementById("modalDesc").innerText = desc;
+            
+            const banner = document.getElementById("modalBanner");
+            banner.className = "modal-banner-box";
+            if (rarity === "UR") { banner.style.background = "var(--ur-bg)"; banner.innerText = "✦ UR ✦"; }
+            else if (rarity === "SSR") { banner.style.background = "var(--ssr-bg)"; banner.innerText = "✦ SSR ✦"; }
+            else if (rarity === "SR") { banner.style.background = "var(--sr-bg)"; banner.innerText = "✦ SR ✦"; }
+            else { banner.style.background = "var(--r-bg)"; banner.innerText = "✦ R ✦"; }
+
+            document.getElementById("modalOverlay").style.display = "flex";
         }
 
         function closeModal() { document.getElementById("modalOverlay").style.display = "none"; }
-        document.getElementById("modalOverlay").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
 
-        window.onload = function() { initParticles(); refreshDashboard(); initPoolPreview(); switchGameMode('runner'); };
+        window.onload = function() {
+            initParticles();
+            initPoolPreview();
+            refreshDashboard();
+            switchGameMode('runner');
+        };
     </script>
 </body>
 </html>
